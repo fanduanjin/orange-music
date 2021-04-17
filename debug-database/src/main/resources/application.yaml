@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: debug-database
+  rabbitmq:
+    addresses: 786793.top:5672

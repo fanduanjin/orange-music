@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: debug-data
+  rabbitmq:
+    addresses: 786793.top:5672
+    publisher-returns: true
+

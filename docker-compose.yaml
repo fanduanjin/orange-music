@@ -27,3 +27,22 @@ services:
     image: zookeeper
     container_name: zookeeper
 
+  rabbitmq:
+    image: rabbitmq:3
+    container_name: rabbitmq
+    expose:
+      - 5672
+    ports:
+    - 5672:5672
+  rabbitmq-management:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-management
+    links:
+      - rabbitmq
+    ports:
+      - 15672:15672
+    environment:
+      - "RABBITMQ_DEFAULT_USER=dalong"
+      - "RABBITMQ_DEFAULT_PASS=dalong"
+
+
