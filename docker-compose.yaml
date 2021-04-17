@@ -16,6 +16,44 @@ services:
     volumes:
     - /docker-data/mysql/my.cnf:/etc/mysql/my.cnf
     - /docker-data/mysql/lib:/var/lib/mysql
+  fastdfs_tracker:
+    container_name: fastdfs_tracker
+    image: season/fastdfs
+    ports:
+    - 22122:22122
+    privileged: true
+    volumes:
+    - /docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
+    - /docker-data/fastdfs/tracker/client.conf:/etc/fdfs/client.conf
+    command: tracker
+  fastdfs_storage:
+    container_name: fastdfs_storage
+    image: season/fastdfs
+    ports:
+    - 23000:23000
+    volumes:
+    - /docker-data/fastdfs/storage/data:/fastdfs/storage/data
+    - /docker-data/fastdfs/storage/path:/fastdfs/store_path
+    links:
+      - fastdfs_tracker:tracker
+    privileged: true
+    environment:
+      - TRACKER_SERVER=tracker:22122
+    command: storage
+  fastdfs_nginx:
+    container_name: fastdfs_nginx
+    image: season/fastdfs:1.2
+    privileged: true
+    ports:
+    - 8888:80
+    links:
+      - fastdfs_tracker:tracker
+    volumes:
+    - /docker-data/fastdfs/storage/path:/fastdfs/store_path
+    - /docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
+    environment:
+      - TRACKER_SERVER=tracker:22122
+    command: nginx
   redis:
     image: redis
     container_name: redis
@@ -26,7 +64,8 @@ services:
   zookeeper:
     image: zookeeper
     container_name: zookeeper
-
+    ports:
+    - 2181:2181
   rabbitmq:
     image: rabbitmq:3
     container_name: rabbitmq
@@ -44,5 +83,16 @@ services:
     environment:
       - "RABBITMQ_DEFAULT_USER=dalong"
       - "RABBITMQ_DEFAULT_PASS=dalong"
+  mangodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+    - 27017:27017
+    volumes:
+    - /docker-data/mongodb/db:/data/db
+    privileged: true
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
 
 

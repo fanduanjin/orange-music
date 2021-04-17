@@ -11,5 +11,11 @@
 
     <artifactId>api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.fan</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -4,4 +4,11 @@ spring:
   rabbitmq:
     addresses: 786793.top:5672
     publisher-returns: true
-
+  data:
+    mongodb:
+      host: 786793.top:27017
+      username: admin
+      password: admin
+dubbo:
+  config-center:
+    address: zookeeper://786793.top:2181

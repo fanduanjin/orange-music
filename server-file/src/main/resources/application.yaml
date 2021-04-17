@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: server-file
+dubbo:
+  application:
+    name: server-file
+  config-center:
+    address: zookeeper://786793.top:2181
+fdfs:
+  tracker-list: 786793.top:22122

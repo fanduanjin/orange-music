@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 
@@ -18,10 +19,9 @@ public class BaseTestDemo {
 
     @Test
     public void TestSingerList(){
-        DebuggerSingerList debuggerSingerList=new DebuggerSingerList();
-
         try {
-            debuggerSingerList.debugger();
+            Connection.Response response=Jsoup.connect("http://y.qq.com/music/photo_new/T001R300x300M000001MXQUi1tlLon.jpg?max_age=2592000").execute();
+            byte[] bytes= response.bodyAsBytes();
         } catch (IOException exception) {
             exception.printStackTrace();
         }

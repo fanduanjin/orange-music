@@ -44,12 +44,11 @@ public class DebuggerSingerList {
     static final int value_sin=80;
     static final String param_cur_page="$cur_page";
 
-    @Scheduled(fixedRate = 20)
+    @Scheduled(fixedRate = 2000)
     public void testM(){
         SingerInfo singerInfo=new SingerInfo();
         singerInfo.setSinger_mid("0025NhlN2yWrP4");
-        rabbitTemplate.convertAndSend(DebuggerConstant.queue_singer_detail,singerInfo);
-        singerInfo.setSinger_mid("002YetSZ06c9c9");
+        singerInfo.setSinger_pic("http://y.qq.com/music/photo_new/T001R800x800M000002YetSZ06c9c9.jpg?max_age=2592000");
         rabbitTemplate.convertAndSend(DebuggerConstant.queue_singer_detail,singerInfo);
     }
 

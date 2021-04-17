@@ -9,7 +9,8 @@
         <module>model</module>
         <module>api</module>
         <module>debug-data</module>
-        <module>debug-database</module>
+        <module>server-singer</module>
+        <module>server-file</module>
     </modules>
     <groupId>cn.fan</groupId>
 
@@ -25,6 +26,8 @@
         <dubbo.version>2.7.10</dubbo.version>
         <jsoup.version>1.13.1</jsoup.version>
         <fastjson.version>1.2.73</fastjson.version>
+        <druid.version>1.2.4</druid.version>
+        <fastdfs.version>1.27.2</fastdfs.version>
     </properties>
 
     <dependencyManagement>
@@ -42,7 +45,7 @@
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot</artifactId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
             </dependency>
 
@@ -56,6 +59,12 @@
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-dependencies-zookeeper</artifactId>
                 <version>${dubbo.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
                 <type>pom</type>
             </dependency>
 
@@ -75,6 +84,18 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.tobato</groupId>
+                <artifactId>fastdfs-client</artifactId>
+                <version>${fastdfs.version}</version>
             </dependency>
 
         </dependencies>

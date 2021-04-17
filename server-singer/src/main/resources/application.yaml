@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: server-singer
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: 786793.top:3306/orange_music
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  type-aliases-package: cn.fan
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
