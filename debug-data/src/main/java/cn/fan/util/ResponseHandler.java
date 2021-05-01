@@ -27,4 +27,12 @@ public class ResponseHandler {
         //开始解析数据 返回JSONObject 类型对象
         return root.getJSONObject(group);
     }
+
+    public static int computePageTotal(int total,int size){
+        int pageTotal=total/size;
+        if(total%size!=0){
+            pageTotal++;
+        }
+        return pageTotal;
+    }
 }

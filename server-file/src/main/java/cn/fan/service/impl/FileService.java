@@ -3,6 +3,7 @@ package cn.fan.service.impl;
 import ch.qos.logback.classic.LoggerContext;
 import cn.fan.api.file.IFileService;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
+import com.github.tobato.fastdfs.domain.upload.FastFile;
 import com.github.tobato.fastdfs.service.DefaultFastFileStorageClient;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -11,9 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -31,11 +30,11 @@ public class FileService implements IFileService {
     private FastFileStorageClient storageClient;
 
     @Override
-    public String uploadFile(byte[] bytes){
+    public String uploadFile(byte[] bytes,String fileSuffix){
         logger.info("开始上传");
-        ByteArrayInputStream byteArrayOutputStream=new ByteArrayInputStream("asdfs".getBytes(StandardCharsets.UTF_8));
-        StorePath storePath= storageClient.uploadFile(byteArrayOutputStream,Long.valueOf(bytes.length),"2342dfafa.txt",null);
-        logger.info("上传成功");
+        ByteArrayInputStream byteArrayOutputStream=new ByteArrayInputStream(bytes);
+        StorePath storePath= storageClient.uploadFile(byteArrayOutputStream,Long.valueOf(bytes.length),fileSuffix,null);
+        logger.info("上传成功:"+storePath.getFullPath());
         return storePath.getFullPath();
     }
 }

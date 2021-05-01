@@ -1,5 +1,6 @@
 import cn.fan.AppFile;
 import cn.fan.api.file.IFileService;
+import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,6 @@ public class FileServiceTest {
 
     @Test
     public void upload(){
-        fileService.uploadFile("fdsfs".getBytes(StandardCharsets.UTF_8));
+        String path= fileService.uploadFile("fdsfs".getBytes(StandardCharsets.UTF_8),"txt");
     }
 }

@@ -19,8 +19,7 @@ services:
   fastdfs_tracker:
     container_name: fastdfs_tracker
     image: season/fastdfs
-    ports:
-    - 22122:22122
+    network_mode: host
     privileged: true
     volumes:
     - /docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
@@ -29,16 +28,13 @@ services:
   fastdfs_storage:
     container_name: fastdfs_storage
     image: season/fastdfs
-    ports:
-    - 23000:23000
+    network_mode: host
     volumes:
     - /docker-data/fastdfs/storage/data:/fastdfs/storage/data
     - /docker-data/fastdfs/storage/path:/fastdfs/store_path
-    links:
-      - fastdfs_tracker:tracker
     privileged: true
     environment:
-      - TRACKER_SERVER=tracker:22122
+      - TRACKER_SERVER=192.168.149.128:22122
     command: storage
   fastdfs_nginx:
     container_name: fastdfs_nginx
@@ -67,22 +63,14 @@ services:
     ports:
     - 2181:2181
   rabbitmq:
-    image: rabbitmq:3
+    image: rabbitmq:management
     container_name: rabbitmq
-    expose:
-      - 5672
     ports:
     - 5672:5672
-  rabbitmq-management:
-    image: rabbitmq:3-management
-    container_name: rabbitmq-management
-    links:
-      - rabbitmq
-    ports:
-      - 15672:15672
+    - 15672:15672
     environment:
-      - "RABBITMQ_DEFAULT_USER=dalong"
-      - "RABBITMQ_DEFAULT_PASS=dalong"
+      - "RABBITMQ_DEFAULT_USER=admin"
+      - "RABBITMQ_DEFAULT_PASS=admin"
   mangodb:
     image: mongo
     container_name: mongodb

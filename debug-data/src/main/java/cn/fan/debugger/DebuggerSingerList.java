@@ -8,6 +8,7 @@ import cn.fan.util.ResponseHandler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.curator.utils.DebugUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -44,12 +45,23 @@ public class DebuggerSingerList {
     static final int value_sin=80;
     static final String param_cur_page="$cur_page";
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 50000)
     public void testM(){
-        SingerInfo singerInfo=new SingerInfo();
-        singerInfo.setSinger_mid("0025NhlN2yWrP4");
-        singerInfo.setSinger_pic("http://y.qq.com/music/photo_new/T001R800x800M000002YetSZ06c9c9.jpg?max_age=2592000");
-        rabbitTemplate.convertAndSend(DebuggerConstant.queue_singer_detail,singerInfo);
+        try {
+            String param="{\"singer_mids\": [\"002FTSfR2lcnnw\"],\"ex_singer\": 1,\"wiki_singer\": 1,\"group_singer\": 1,\"pic\": 1,\"photos\": 0}";
+            RequestTemplate requestTemplate=new RequestTemplate();
+            requestTemplate.setMethod("GetSingerDetail");
+            requestTemplate.setModule("musichall.singer_info_server");
+            requestTemplate.setGroup("getSingerDetail");
+            requestTemplate.setParam(param);
+            String data=requestTemplate.toString();
+            String sign=QqEncrypt.getSign(data);
+            String url=ConfigConstant.baseUrl+"sign="+sign+"&data="+data;
+            Connection.Response response=Jsoup.connect(url).execute();
+            logger.info(response.body());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     //@Scheduled(cron = "30 * * * * *")
@@ -76,13 +88,10 @@ public class DebuggerSingerList {
             if(len==1){
                 //len等于1 计算下 一共有多少页
                 int total=jso_data.getIntValue("total");
-                len=total/value_sin;
-                if(total%value_sin!=0){
-                    len++;
-                }
+                len=ResponseHandler.computePageTotal(total,value_sin);
             }
-            if(i>5){
-                //测试用 大于5 不用再爬取
+            if(i>2){
+                //测试用 大于2 不用再爬取
                 break;
             }
             JSONArray jsa_singerList=jso_data.getJSONArray("singerlist");
@@ -102,7 +111,8 @@ public class DebuggerSingerList {
             singerInfo.setSinger_pic(jsonObject.getString("singer_pic"));
             //爬取玩基础 信息，再爬取 歌手详细信息 提交到mq 通过mq监听在进行爬取
             rabbitTemplate.convertAndSend(DebuggerConstant.queue_singer_detail,singerInfo);
-            logger.info("提交到 mq 准备爬取 歌手详细信息");
+            //爬取 所有歌曲列表
+            rabbitTemplate.convertAndSend(DebuggerConstant.queue_song_list,singerInfo);
         }
     }
 
