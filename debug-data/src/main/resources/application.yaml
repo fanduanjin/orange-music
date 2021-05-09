@@ -1,6 +1,8 @@
 spring:
   application:
     name: debug-data
+    workerId: 1
+    datacenterId: 1
   rabbitmq:
     addresses: 786793.top:5672
     publisher-returns: true

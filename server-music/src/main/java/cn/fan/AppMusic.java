@@ -11,14 +11,14 @@ import java.io.IOException;
  * @program: orange-music
  * @description:
  * @author: fanduanjin
- * @create: 2021-04-17 21:57
+ * @create: 2021-05-08 18:52
  */
 @SpringBootApplication
 @EnableDubbo
 @MapperScan("cn.fan.dao")
-public class AppFile {
+public class AppMusic {
     public static void main(String[] args) {
-        SpringApplication.run(AppFile.class,args);
+        SpringApplication.run(AppMusic.class,args);
         try {
             System.in.read();
         } catch (IOException exception) {

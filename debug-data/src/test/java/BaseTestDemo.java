@@ -20,8 +20,9 @@ public class BaseTestDemo {
     @Test
     public void TestSingerList(){
         try {
-            Connection.Response response=Jsoup.connect("http://y.qq.com/music/photo_new/T001R300x300M000001MXQUi1tlLon.jpg?max_age=2592000").execute();
+            Connection.Response response=Jsoup.connect("http://y.qq.com/music/photo_new/T001R300x300M000001MXQUi1tlLon.jpg?max_age=2592000").ignoreContentType(true).execute();
             byte[] bytes= response.bodyAsBytes();
+            System.out.println(bytes.length);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

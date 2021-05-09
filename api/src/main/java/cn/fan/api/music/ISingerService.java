@@ -1,6 +1,6 @@
-package cn.fan.api.singer;
+package cn.fan.api.music;
 
-import cn.fan.model.Singer.Singer;
+import cn.fan.model.music.Singer;
 
 /**
  * @program: orange-music
@@ -37,5 +37,12 @@ public interface ISingerService {
      * @return
      */
     Singer get(int id);
+
+    /**
+     * 根据平台 singer_id获取
+     * @param id
+     * @return
+     */
+    Singer getByPlatId(int id);
 
 }

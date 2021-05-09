@@ -1,6 +1,6 @@
 spring:
   application:
-    name: server-file
+    name: server-music
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://786793.top:3306/orange_music
@@ -14,9 +14,7 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 dubbo:
-  application:
-    name: server-file
   config-center:
     address: zookeeper://786793.top:2181
-fdfs:
-  tracker-list: 786793.top:22122
+  application:
+    name: server-music

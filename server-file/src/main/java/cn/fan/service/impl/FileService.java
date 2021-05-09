@@ -31,7 +31,6 @@ public class FileService implements IFileService {
 
     @Override
     public String uploadFile(byte[] bytes,String fileSuffix){
-        logger.info("开始上传");
         ByteArrayInputStream byteArrayOutputStream=new ByteArrayInputStream(bytes);
         StorePath storePath= storageClient.uploadFile(byteArrayOutputStream,Long.valueOf(bytes.length),fileSuffix,null);
         logger.info("上传成功:"+storePath.getFullPath());

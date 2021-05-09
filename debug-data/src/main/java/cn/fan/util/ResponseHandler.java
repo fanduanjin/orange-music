@@ -4,6 +4,8 @@ import cn.fan.exception.ResponseHandlerException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @program: orange-music
@@ -12,11 +14,13 @@ import org.jsoup.Connection;
  * @create: 2021-04-16 20:09
  */
 public class ResponseHandler {
+    public  static final Logger LOGGER=LoggerFactory.getLogger(ResponseHandler.class);
     public static JSONObject getData(Connection.Response response,String group){
         String body=response.body();
         if(body==null||body.isEmpty()){
             throw  new ResponseHandlerException("debugger result is emplty");
         }
+        LOGGER.info(body);
         JSONObject root= JSON.parseObject(body);
         //获取接口状态码
         int code=root.getIntValue("code");

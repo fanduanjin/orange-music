@@ -40,15 +40,12 @@ services:
     container_name: fastdfs_nginx
     image: season/fastdfs:1.2
     privileged: true
-    ports:
-    - 8888:80
-    links:
-      - fastdfs_tracker:tracker
+    network_mode: host
     volumes:
     - /docker-data/fastdfs/storage/path:/fastdfs/store_path
     - /docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
     environment:
-      - TRACKER_SERVER=tracker:22122
+      - TRACKER_SERVER=localhost:22122
     command: nginx
   redis:
     image: redis

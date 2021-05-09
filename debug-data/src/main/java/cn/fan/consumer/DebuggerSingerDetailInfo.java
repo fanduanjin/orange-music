@@ -1,16 +1,21 @@
 package cn.fan.consumer;
 
-import ch.qos.logback.core.util.FileUtil;
-import cn.fan.api.file.IFileService;
+import cn.fan.api.music.ISingerService;
+import cn.fan.constant.ConfigConstant;
+import cn.fan.debugger.RequestTemplate;
 import cn.fan.model.constanst.DebuggerConstant;
-import cn.fan.model.debugger.SingerInfo;
+import cn.fan.model.file.Resource;
+import cn.fan.model.music.Singer;
+import cn.fan.util.QqEncrypt;
+import cn.fan.util.ResponseHandler;
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.Reference;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.internal.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -18,84 +23,145 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.FileSystemUtils;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * @program: orange-music
- * @description:
+ * @description: 爬取歌手详情信息
  * @author: fanduanjin
- * @create: 2021-04-17 14:08
+ * @create: 2021-05-07 22:42
  */
-
 @Component
 @RabbitListener(queuesToDeclare = @Queue(DebuggerConstant.queue_singer_detail))
 public class DebuggerSingerDetailInfo {
     private static final Logger LOGGER = LoggerFactory.getLogger(DebuggerSingerDetailInfo.class);
 
-    public static final String baseUrl = "https://y.qq.com/n/ryqq/singer/";
+    @Value("${spring.application.workerId}")
+    private int workerId;
+    @Value("${spring.application.datacenterId}")
+    private int datacenterId;
 
     @DubboReference
-    private IFileService fileService;
+    private ISingerService singerService;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private static final String param_template = "{\"singer_mids\": [\"$singer_mid\"],\"ex_singer\": 1,\"wiki_singer\": 1,\"group_singer\": 1,\"pic\": 1,\"photos\": 1}";
+    private static final String method = "GetSingerDetail";
+    private static final String module = "musichall.singer_info_server";
+    private static final String group = "getSingerDetail";
+    private static final String param_singer_mid = "$singer_mid";
 
     @RabbitHandler
-    public void receivel(SingerInfo msg) {
-        try {
-            Document document = Jsoup.connect(baseUrl + msg.getSinger_mid()).get();
-            Elements elements = document.getElementsByClass("popup_data_detail__cont");
-            //歌手简介div
-            msg.setSinger_desc(elements.html());
-            //保存到mongodb
-            Query query = new Query();
-            query.addCriteria(Criteria.where("singer_id").is(msg.getSinger_id()));
-            SingerInfo singerInfo = mongoTemplate.findOne(query, SingerInfo.class, DebuggerConstant.coll_singer);
-            if (singerInfo == null) {
-                //不存在 新增
-                LOGGER.info("mongodb 新增" + msg.getSinger_name());
-                //保存mongodb
-                mongoTemplate.save(msg, DebuggerConstant.coll_singer);
-            } else {
-                //存在 修改
-                boolean picModify = !msg.getSinger_pic().equals(singerInfo.getSinger_pic());
-                boolean isModify = !msg.getSinger_mid().equals(singerInfo.getSinger_mid()) ||
-                        !msg.getSinger_desc().equals(singerInfo.getSinger_desc()) ||
-                        !msg.getSinger_name().equals(singerInfo.getSinger_name())
-                        || picModify;
-                if (isModify) {
-                    if (picModify) {
-                        //只是修改头像 则更新头像 修改其他信息 则修改其他信息
-                        //提交到 mq 修改完 并更新 mongodb 图片信息
-                        LOGGER.info("头像修改了" + msg.getSinger_name());
-                    } else {
-                        LOGGER.info("歌手其他信息修改了"+singerInfo.getSinger_name());
-                        Update update = new Update();
-                        update.set("singer_id", msg.getSinger_id());
-                        update.set("singer_mid", msg.getSinger_mid());
-                        update.set("singer_desc", msg.getSinger_desc());
-                        update.set("singer_name", msg.getSinger_name());
-                        mongoTemplate.updateFirst(query, update, DebuggerConstant.coll_singer);
-                    }
+    public void receiver(String singer_mid) throws IOException {
+        LOGGER.info("handler " + DebuggerConstant.queue_singer_detail + ":" + singer_mid);
+        String param = param_template.replace(param_singer_mid, singer_mid);
+        RequestTemplate requestTemplate = new RequestTemplate();
+        requestTemplate.setParam(param);
+        requestTemplate.setMethod(method);
+        requestTemplate.setModule(module);
+        requestTemplate.setGroup(group);
+        String data = requestTemplate.toString();
+        String sign = QqEncrypt.getSign(data);
+        String url = ConfigConstant.baseUrl + "sign=" + sign + "&data=" + data;
+        Connection.Response response = null;
+        response = Jsoup.connect(url).execute();
+        //处理响应数据
+        JSONObject jo_root = ResponseHandler.getData(response, group);
+        JSONObject jo_data = jo_root.getJSONObject("data");
+        JSONArray ja_singerList = jo_data.getJSONArray("singer_list");
+        //由于一次性只获取一个 歌手详细 直接获取 数组坐标0就可以
+        JSONObject jo_singerDetail = ja_singerList.getJSONObject(0);
+        handlerSingerDetail(jo_singerDetail);
+    }
+
+    void handlerSingerDetail(JSONObject jo_singerDetail) {
+        Singer singerInfo = new Singer();
+        //获取基础信息
+        JSONObject jo_basic_info = jo_singerDetail.getJSONObject("basic_info");
+        singerInfo.setMid(jo_basic_info.getString("singer_mid"));
+        singerInfo.setPlatId(jo_basic_info.getIntValue("singer_id"));
+        singerInfo.setName(jo_basic_info.getString("name"));
+        singerInfo.setType(jo_basic_info.getIntValue("type"));
+        // ex_info
+        JSONObject jo_ex_info = jo_singerDetail.getJSONObject("ex_info");
+        singerInfo.setArea(jo_ex_info.getIntValue("area"));
+        singerInfo.setDesc(jo_ex_info.getString("desc"));
+        singerInfo.setGenre(jo_ex_info.getIntValue("genre"));
+        singerInfo.setForeignName(jo_ex_info.getString("foreign_name"));
+        singerInfo.setBirthday(jo_ex_info.getDate("birthday"));
+        //wiki 处理 wiki
+        singerInfo.setWiki(jo_singerDetail.getString("wiki"));
+        //头像处理pic
+        JSONObject jo_pic = jo_singerDetail.getJSONObject("pic");
+        //获取头像 url
+        String pic_url = jo_pic.getString("pic");
+        pic_url = pic_url == null ? "" : pic_url;
+        singerInfo.setPic(pic_url);
+        Singer singer = singerService.getByPlatId(singerInfo.getPlatId());
+        if (singer == null) {
+            //生成全局唯一id
+            long resource_id = IdUtil.getSnowflake(workerId, datacenterId).nextId();
+            singerInfo.setPicResourceId(resource_id);
+            singerService.insert(singerInfo);
+            LOGGER.info("持久化到数据库:" + singerInfo.getMid());
+
+            if (!pic_url.isEmpty()) {
+                Resource resource = new Resource();
+                resource.setResourceId(resource_id);
+                //http://y.gtimg.cn/music/photo_new/T001R300x300M000001tYW3b0S3Rd9.jpg
+                //获取 800x800的尺寸
+                String source_path = pic_url.replace("300x300", "800x800");
+                resource.setSourcePath(source_path);
+                rabbitTemplate.convertAndSend(DebuggerConstant.queue_dowload_resource, resource);
+            }
+
+        } else {
+            boolean picIsUpdate = !singer.getPic().equals(pic_url);
+            boolean isModify = singerInfoIsModify(singer, singerInfo);
+            long pic_resource_id = singer.getPicResourceId();
+            if (isModify || picIsUpdate) {
+                if (picIsUpdate) {
+                    //图片头像修改过了 url为空 id 为0
+                    pic_resource_id = pic_url.isEmpty() ? 0 : IdUtil.getSnowflake(workerId, datacenterId).nextId();
+                }
+                singerInfo.setId(singer.getId());
+                singerInfo.setPicResourceId(pic_resource_id);
+                singerService.modify(singerInfo);
+                LOGGER.info("更新了 SingerInfo" + JSON.toJSONString(singerInfo));
+                if (picIsUpdate && !pic_url.isEmpty()) {
+                    Resource resource = new Resource();
+                    resource.setResourceId(pic_resource_id);
+                    //http://y.gtimg.cn/music/photo_new/T001R300x300M000001tYW3b0S3Rd9.jpg
+                    //获取 800x800的尺寸
+                    String source_path = pic_url.replace("300x300", "800x800");
+                    resource.setSourcePath(source_path);
+                    rabbitTemplate.convertAndSend(DebuggerConstant.queue_dowload_resource, resource);
                 }
             }
-            //保存 mongodb 爬取 歌曲列表
-            rabbitTemplate.convertAndSend(DebuggerConstant.queue_song_list,msg);
-        } catch (IOException exception) {
-            LOGGER.error(exception.toString());
         }
+
 
     }
 
+    boolean singerInfoIsModify(Singer db_singer, Singer y_singer) {
+        boolean isModify;
+        Integer id= db_singer.getId();
+        long picResourceId= db_singer.getPicResourceId();
+        //将 两个 singer 都转化为字符串 再去比较，解决其他列 为空时的异常
+        db_singer.setId(0);
+        db_singer.setPicResourceId(0L);
+        y_singer.setId(0);
+        y_singer.setPicResourceId(0L);
+        String json_db_singer=JSON.toJSONString(db_singer);
+        String json_singer_info=JSON.toJSONString(y_singer);
+        isModify=!json_db_singer.equals(json_singer_info);
+        db_singer.setId(id);
+        db_singer.setPicResourceId(picResourceId);
+        return isModify;
+    }
 }

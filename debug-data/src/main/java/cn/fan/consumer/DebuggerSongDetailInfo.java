@@ -1,8 +1,7 @@
 package cn.fan.consumer;
 
+import cn.fan.model.music.Song;
 import cn.fan.model.constanst.DebuggerConstant;
-import cn.fan.model.debugger.SongInfo;
-import com.alibaba.fastjson.JSON;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,7 +34,7 @@ public class DebuggerSongDetailInfo {
     private static final Logger LOGGER = LoggerFactory.getLogger(DebuggerSongDetailInfo.class);
 
     @RabbitHandler
-    void reactive(SongInfo msg) {
+    void receiver(Song msg) {
         String url = url_template.replace(param_song_mid, msg.getMid());
         try {
             Document document = Jsoup.connect(url).get();
@@ -44,7 +43,7 @@ public class DebuggerSongDetailInfo {
             //handlerProperty(data_info_ul.iterator());
             LOGGER.info(document.html());
         } catch (IOException exception) {
-            LOGGER.error(exception.getMessage());
+            LOGGER.error(exception.toString());
         }
     }
 

@@ -1,11 +1,14 @@
 package cn.fan.constant;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  * @program: orange-music
  * @description:
  * @author: fanduanjin
  * @create: 2021-04-16 15:36
  */
+@Document
 public class ConfigConstant {
     /**
      * 基础url
