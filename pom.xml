@@ -12,6 +12,7 @@
         <module>server-music</module>
         <module>server-file</module>
         <module>document</module>
+        <module>server-common</module>
     </modules>
     <groupId>cn.fan</groupId>
 

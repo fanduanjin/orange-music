@@ -3,7 +3,6 @@ package cn.fan.consumer;
 import cn.fan.constant.ConfigConstant;
 import cn.fan.debugger.RequestTemplate;
 import cn.fan.model.music.Singer;
-import cn.fan.model.music.Song;
 import cn.fan.model.constanst.DebuggerConstant;
 import cn.fan.util.QqEncrypt;
 import cn.fan.util.ResponseHandler;
@@ -45,14 +44,14 @@ public class DebuggerSongList {
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @RabbitHandler
-    void receiver(Singer msg) {
+    void receiver(String msg) {
         RequestTemplate requestTemplate = new RequestTemplate();
         requestTemplate.setGroup(group);
         requestTemplate.setModule(module);
         requestTemplate.setMethod(method);
         try {
             for (int i = 1, len = 1; i <= len; i++) {
-                requestTemplate.setParam(buildParam(msg.getMid(), i));
+                requestTemplate.setParam(buildParam(msg, i));
                 String data = requestTemplate.toString();
                 String sign = QqEncrypt.getSign(data);
                 String url = ConfigConstant.baseUrl + "sign=" + sign + "&data=" + data;
@@ -83,20 +82,12 @@ public class DebuggerSongList {
     void handlerSongList(JSONArray jsonArray) {
         JSONObject jso_song = null;
         JSONObject jso_songInfo = null;
-        Song songInfo=new Song();
         for (Iterator iterator = jsonArray.iterator(); iterator.hasNext(); ) {
             jso_song = (JSONObject) iterator.next();
             jso_songInfo = jso_song.getJSONObject("songInfo");
-            songInfo.setId(jso_songInfo.getIntValue("id"));
-            songInfo.setMid(jso_songInfo.getString("mid"));
-            songInfo.setSubTitle(jso_songInfo.getString("subtitle"));
-            songInfo.setTitle(jso_songInfo.getString("title"));
-            songInfo.setPublicTime(jso_songInfo.getString("time_public"));
-            //获取专辑id
-            JSONObject jso_album=jso_songInfo.getJSONObject("album");
-            songInfo.setAlbumId(jso_album.getIntValue("id"));
+            String song_mid=jso_songInfo.getString("mid");
             //获取完 提交到mq 爬取 歌曲详情信息
-            rabbitTemplate.convertAndSend(DebuggerConstant.queue_song_detail,songInfo);
+            rabbitTemplate.convertAndSend(DebuggerConstant.queue_song_detail,song_mid);
         }
     }
 

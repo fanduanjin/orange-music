@@ -6,7 +6,7 @@
 <generatorConfiguration>
 
     <properties resource="db.properties"></properties>
-    <context id="music" targetRuntime="MyBatis3" defaultModelType="flat">
+    <context id="server-music" targetRuntime="MyBatis3" defaultModelType="flat">
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
         <property name="autoDelimitKeywords" value="true"/>
@@ -43,7 +43,7 @@
         </table>
     </context>
 
-    <context id="server-music" targetRuntime="MyBatis3" defaultModelType="flat">
+    <context id="server-file" targetRuntime="MyBatis3" defaultModelType="flat">
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
         <property name="autoDelimitKeywords" value="true"/>
@@ -80,4 +80,40 @@
         </table>
     </context>
 
+    <context id="server-common" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 为模型生成序列化方法-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!-- 为生成的Java模型创建一个toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!--生成mapper.xml时覆盖原文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <!--        <commentGenerator type="com.macro.mall.CommentGenerator">-->
+        <!--            &lt;!&ndash; 是否去除自动生成的注释 true：是 ： false:否 &ndash;&gt;-->
+        <!--            <property name="suppressAllComments" value="true"/>-->
+        <!--            <property name="suppressDate" value="true"/>-->
+        <!--            <property name="addRemarkComments" value="true"/>-->
+        <!--        </commentGenerator>-->
+
+        <jdbcConnection driverClass="${db.driver}"
+                        connectionURL="${db.url}"
+                        userId="${db.user}"
+                        password="${db.pwd}">
+            <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
+            <property name="nullCatalogMeansCurrent" value="true" />
+        </jdbcConnection>
+        <javaModelGenerator targetPackage="cn.fan.model.common" targetProject="..\model\src\main\java"/>
+
+        <sqlMapGenerator targetPackage="mapper" targetProject="..\server-common\src\main\resources"/>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.fan.dao"
+                             targetProject="..\server-common\src\main\java"/>
+        <!--生成全部表tableName设为%-->
+        <table tableName="property">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
 </generatorConfiguration>

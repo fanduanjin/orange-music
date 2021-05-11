@@ -88,6 +88,7 @@ public class DebuggerSingerList {
             jsonObject = (JSONObject) iterator.next();
             String singer_mid = jsonObject.getString("singer_mid");
             //取除mid 爬取歌手详细信息
+            singer_mid="0025NhlN2yWrP4";
             logger.info("send "+DebuggerConstant.queue_singer_detail+":"+singer_mid);
             rabbitTemplate.convertAndSend(DebuggerConstant.queue_singer_detail, singer_mid);
         }

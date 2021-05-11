@@ -1,5 +1,6 @@
 
 import cn.fan.debugger.DebuggerSingerList;
+import cn.fan.model.music.Singer;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,13 +20,8 @@ public class BaseTestDemo {
 
     @Test
     public void TestSingerList(){
-        try {
-            Connection.Response response=Jsoup.connect("http://y.qq.com/music/photo_new/T001R300x300M000001MXQUi1tlLon.jpg?max_age=2592000").ignoreContentType(true).execute();
-            byte[] bytes= response.bodyAsBytes();
-            System.out.println(bytes.length);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
+        System.out.println(Singer.class.hashCode());
     }
+
+
 }

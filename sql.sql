@@ -27,6 +27,25 @@ create table resource(
 	INDEX(resource_id)
 );
 
+create table song(
+	id int UNSIGNED auto_increment primary key ,
+	mid nvarchar(255),
+	plat_Id int UNSIGNED,
+	name nvarchar(255),
+	title nvarchar(255),
+	sub_title nvarchar(255),
+	album_plat_id int UNSIGNED,
+	
+);
+
+create table property(
+ id int UNSIGNED auto_increment PRIMARY key ,
+ entity_id int UNSIGNED COMMENT'singer.id 实体类的主键id',
+ `key` nvarchar(255),
+ `value` nvarchar(255),
+ INDEX(entity_id)
+);
+
 
 
 
@@ -42,3 +61,7 @@ SHOW FULL COLUMNS  from singer;
 
 select singer.*,resource.dfs_path from singer left join resource
 on singer.pic_resource_id=resource.resource_id
+
+update singer set name=null
+
+drop table attribute

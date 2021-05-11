@@ -77,6 +77,8 @@ public class DebuggerSingerDetailInfo {
         //由于一次性只获取一个 歌手详细 直接获取 数组坐标0就可以
         JSONObject jo_singerDetail = ja_singerList.getJSONObject(0);
         handlerSingerDetail(jo_singerDetail);
+        //开始准备爬取歌曲信息
+        rabbitTemplate.convertAndSend(DebuggerConstant.queue_song_list,singer_mid);
     }
 
     void handlerSingerDetail(JSONObject jo_singerDetail) {
