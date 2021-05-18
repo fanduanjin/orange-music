@@ -2,8 +2,6 @@ package cn.fan.api.common;
 
 import cn.fan.model.common.Property;
 
-import java.util.List;
-
 /**
  * @program: orange-music
  * @description:

@@ -2,12 +2,9 @@ package cn.fan.service.impl;
 
 import cn.fan.api.common.IPropertyService;
 import cn.fan.dao.PropertyMapper;
-import cn.fan.model.common.Property;
 import cn.fan.model.common.PropertyExample;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * @program: orange-music

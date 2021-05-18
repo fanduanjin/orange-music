@@ -29,26 +29,32 @@ create table resource(
 
 create table song(
 	id int UNSIGNED auto_increment primary key ,
+	type int UNSIGNED,
 	mid nvarchar(255),
 	plat_Id int UNSIGNED,
 	name nvarchar(255),
 	title nvarchar(255),
 	sub_title nvarchar(255),
 	album_plat_id int UNSIGNED,
-	
+	mvid nvarchar(255),
+	`language` int UNSIGNED,
+	genre int UNSIGNED,
+	public_time DATE,
+	price_play boolean,
+	media_mid nvarchar(255)
 );
 
 create table property(
  id int UNSIGNED auto_increment PRIMARY key ,
- entity_id int UNSIGNED COMMENT'singer.id 实体类的主键id',
+ entity_type nvarchar(255),
+ entity_id int UNSIGNED,
  `key` nvarchar(255),
- `value` nvarchar(255),
- INDEX(entity_id)
+ `value` nvarchar(255)
 );
 
 
 
-
+drop table property;
 delete from singer;
 delete from resource;
 show index from singer

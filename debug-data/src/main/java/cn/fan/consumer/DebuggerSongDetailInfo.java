@@ -2,9 +2,13 @@ package cn.fan.consumer;
 
 import cn.fan.constant.ConfigConstant;
 import cn.fan.debugger.RequestTemplate;
+import cn.fan.model.common.Property;
 import cn.fan.model.constanst.DebuggerConstant;
+import cn.fan.model.music.Song;
 import cn.fan.util.QqEncrypt;
 import cn.fan.util.ResponseHandler;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -16,6 +20,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: orange-music
@@ -51,7 +58,52 @@ public class DebuggerSongDetailInfo {
         Connection.Response response=Jsoup.connect(url).execute();
         JSONObject jo_root = ResponseHandler.getData(response,group);
         JSONObject jo_data=jo_root.getJSONObject("data");
+        JSONObject jo_info=jo_data.getJSONObject("info");
+        Song song=new Song();
+        List<Property> properties= parseProperties(jo_info);
+        JSONObject jo_track_info=jo_data.getJSONObject("track_info");
+        song.setTitle(jo_track_info.getString("title"));
+        song.setName(jo_track_info.getString("name"));
+        song.setSubTitle(jo_track_info.getString("subtitle"));
+        JSONObject jo_album=jo_track_info.getJSONObject("album");
+        if(jo_album!=null) {
+            song.setAlbumPlatId(jo_album.getInteger("id"));
+        }
+        JSONObject jo_mv=jo_track_info.getJSONObject("mv");
+        if(jo_mv!=null){
+            song.setMvid(jo_mv.getString("vid"));
+        }
+        JSONObject jo_pay=jo_track_info.getJSONObject("pay");
+        if(jo_pay!=null){
+            Boolean pay_down=jo_pay.getBoolean("pay_down");
+            Boolean pay_play=jo_pay.getBoolean("pay_play");
+            song.setPricePlay(pay_down||pay_play);
+        }
+        song.setLanguage(jo_track_info.getInteger("language"));
+        song.setGenre(jo_track_info.getIntValue("genre"));
+        song.setPublicTime(jo_track_info.getDate("time_public"));
+        song.setType(jo_track_info.getIntValue("type"));
+        song.setPlatId(jo_track_info.getInteger("id"));
+        song.setMid(jo_track_info.getString("mid"));
+        JSONObject jo_file=jo_track_info.getJSONObject("file");
+        song.setMediaMid(jo_file.getString("media_mid"));
+        LOGGER.info("test:"+ JSON.toJSONString(song));
+    }
 
+    List<Property> parseProperties(JSONObject jo_info){
+        //便利每个jsonobject 取出 title value
+        Property property;
+        List<Property> properties=new ArrayList<>();
+        for(Map.Entry<String, Object> entry : jo_info.entrySet()){
+            JSONObject jo_property=(JSONObject) entry.getValue();
+            property=new Property();
+            property.setKey(jo_property.getString("title"));
+            JSONArray ja_content=jo_property.getJSONArray("content");
+            JSONObject jo_content=ja_content.getJSONObject(0);
+            property.setValue(jo_content.getString("value"));
+            properties.add(property);
+        }
+        return properties;
     }
 
 

@@ -23,7 +23,7 @@
 <!--            <property name="suppressDate" value="true"/>-->
 <!--            <property name="addRemarkComments" value="true"/>-->
 <!--        </commentGenerator>-->
-
+        <plugin type="cn.fan.generator.plugins.BatchInsertPlugin"></plugin>
         <jdbcConnection driverClass="${db.driver}"
                         connectionURL="${db.url}"
                         userId="${db.user}"
@@ -31,14 +31,17 @@
             <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
             <property name="nullCatalogMeansCurrent" value="true" />
         </jdbcConnection>
-        <javaModelGenerator targetPackage="cn.fan.model.music" targetProject="..\model\src\main\java"/>
+        <javaModelGenerator targetPackage="cn.fan.model.music" targetProject="model\src\main\java"/>
 
-        <sqlMapGenerator targetPackage="mapper" targetProject="..\server-music\src\main\resources"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="server-music\src\main\resources"/>
 
         <javaClientGenerator type="XMLMAPPER" targetPackage="cn.fan.dao"
-                             targetProject="..\server-music\src\main\java"/>
+                             targetProject="server-music\src\main\java"/>
         <!--生成全部表tableName设为%-->
         <table tableName="singer">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="song">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
@@ -60,7 +63,7 @@
         <!--            <property name="suppressDate" value="true"/>-->
         <!--            <property name="addRemarkComments" value="true"/>-->
         <!--        </commentGenerator>-->
-
+        <plugin type="cn.fan.generator.plugins.BatchInsertPlugin"></plugin>
         <jdbcConnection driverClass="${db.driver}"
                         connectionURL="${db.url}"
                         userId="${db.user}"
@@ -68,12 +71,12 @@
             <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
             <property name="nullCatalogMeansCurrent" value="true" />
         </jdbcConnection>
-        <javaModelGenerator targetPackage="cn.fan.model.file" targetProject="..\model\src\main\java"/>
+        <javaModelGenerator targetPackage="cn.fan.model.file" targetProject="model\src\main\java"/>
 
-        <sqlMapGenerator targetPackage="mapper" targetProject="..\server-file\src\main\resources"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="server-file\src\main\resources"/>
 
             <javaClientGenerator type="XMLMAPPER" targetPackage="cn.fan.dao"
-                             targetProject="..\server-file\src\main\java"/>
+                             targetProject="server-file\src\main\java"/>
         <!--生成全部表tableName设为%-->
         <table tableName="resource">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
@@ -97,7 +100,7 @@
         <!--            <property name="suppressDate" value="true"/>-->
         <!--            <property name="addRemarkComments" value="true"/>-->
         <!--        </commentGenerator>-->
-
+        <plugin type="cn.fan.generator.plugins.BatchInsertPlugin"></plugin>
         <jdbcConnection driverClass="${db.driver}"
                         connectionURL="${db.url}"
                         userId="${db.user}"
@@ -105,12 +108,12 @@
             <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
             <property name="nullCatalogMeansCurrent" value="true" />
         </jdbcConnection>
-        <javaModelGenerator targetPackage="cn.fan.model.common" targetProject="..\model\src\main\java"/>
+        <javaModelGenerator targetPackage="cn.fan.model.common" targetProject="model\src\main\java"/>
 
-        <sqlMapGenerator targetPackage="mapper" targetProject="..\server-common\src\main\resources"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="server-common\src\main\resources"/>
 
         <javaClientGenerator type="XMLMAPPER" targetPackage="cn.fan.dao"
-                             targetProject="..\server-common\src\main\java"/>
+                             targetProject="server-common\src\main\java"/>
         <!--生成全部表tableName设为%-->
         <table tableName="property">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
