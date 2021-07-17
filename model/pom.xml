@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-annotation</artifactId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
             <scope>compile</scope>
         </dependency>
     </dependencies>
