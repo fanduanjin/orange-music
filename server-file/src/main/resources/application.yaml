@@ -20,3 +20,8 @@ dubbo:
     address: zookeeper://786793.top:2181
 fdfs:
   tracker-list: 786793.top:22122
+mybatis-plus:
+  global-config:
+    db-config:
+      column-format: "`%s`"
+      id-type: auto

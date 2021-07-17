@@ -4,6 +4,7 @@ import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 @SpringBootApplication
 @EnableDubbo
 @MapperScan("cn.fan.dao")
+@EnableTransactionManagement
 public class AppMusic {
     public static void main(String[] args) {
         SpringApplication.run(AppMusic.class,args);

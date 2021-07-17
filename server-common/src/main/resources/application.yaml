@@ -13,6 +13,11 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis-plus:
+  global-config:
+    db-config:
+      column-format: "`%s`"
+      id-type: auto
 dubbo:
   application:
     name: server-common

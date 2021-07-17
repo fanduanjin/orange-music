@@ -43,31 +43,24 @@ create table song(
 	price_play boolean,
 	media_mid nvarchar(255)
 );
+alter table song add COLUMN lrc Text;
+alter table song add media_resource_id BIGINT UNSIGNED;
 
 create table property(
  id int UNSIGNED auto_increment PRIMARY key ,
  entity_type nvarchar(255),
  entity_id int UNSIGNED,
  `key` nvarchar(255),
- `value` nvarchar(255)
+ `value` Text
 );
+ SHOW TABLES
+ 
+select * from singer WHERE plat_id=19851
+
+select count(1) from singer
+select count(1) from song
 
 
-
-drop table property;
-delete from singer;
-delete from resource;
-show index from singer
-drop table singer;
-drop table resource;
-
-select *from singer;
-select *from resource;
-SHOW FULL COLUMNS  from singer;
-
-select singer.*,resource.dfs_path from singer left join resource
-on singer.pic_resource_id=resource.resource_id
-
-update singer set name=null
-
-drop table attribute
+select * from song;
+ 
+ 

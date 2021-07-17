@@ -2,6 +2,9 @@ package cn.fan.api.common;
 
 import cn.fan.model.common.Property;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @program: orange-music
  * @description:
@@ -16,15 +19,15 @@ public interface IPropertyService {
      */
     int insert(Property property);
 
-    /**
-     * 根据 实体.ID 删除
-     * @param entityId
-     * @return
-     */
     int remove(int id);
 
-    int removeByEntityId(int entityId);
+    int removeByEntityId(Class clazz, int entityId);
+
+    List<Property> list(Class clazz,int entityId);
 
     int modify(Property property);
 
+    boolean modifyBatch(List<Property> properties);
+
+    boolean insertBatch(List<Property> properties);
 }

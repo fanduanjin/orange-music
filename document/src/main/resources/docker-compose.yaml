@@ -14,27 +14,27 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     privileged: "true"
     volumes:
-    - /docker-data/mysql/my.cnf:/etc/mysql/my.cnf
-    - /docker-data/mysql/lib:/var/lib/mysql
+    - /home/docker-data/mysql/my.cnf:/etc/mysql/my.cnf
+    - /home/docker-data/mysql/lib:/var/lib/mysql
   fastdfs_tracker:
     container_name: fastdfs_tracker
     image: season/fastdfs
     network_mode: host
     privileged: true
     volumes:
-    - /docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
-    - /docker-data/fastdfs/tracker/client.conf:/etc/fdfs/client.conf
+    - /home/docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
+    - /home/docker-data/fastdfs/tracker/client.conf:/etc/fdfs/client.conf
     command: tracker
   fastdfs_storage:
     container_name: fastdfs_storage
     image: season/fastdfs
     network_mode: host
     volumes:
-    - /docker-data/fastdfs/storage/data:/fastdfs/storage/data
-    - /docker-data/fastdfs/storage/path:/fastdfs/store_path
+    - /home/docker-data/fastdfs/storage/data:/fastdfs/storage/data
+    - /home/docker-data/fastdfs/storage/path:/fastdfs/store_path
     privileged: true
     environment:
-      - TRACKER_SERVER=192.168.149.128:22122
+      - TRACKER_SERVER=192.168.0.106:22122
     command: storage
   fastdfs_nginx:
     container_name: fastdfs_nginx
@@ -42,8 +42,8 @@ services:
     privileged: true
     network_mode: host
     volumes:
-    - /docker-data/fastdfs/storage/path:/fastdfs/store_path
-    - /docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
+    - /home/docker-data/fastdfs/storage/path:/fastdfs/store_path
+    - /home/docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
     environment:
       - TRACKER_SERVER=localhost:22122
     command: nginx
@@ -74,10 +74,21 @@ services:
     ports:
     - 27017:27017
     volumes:
-    - /docker-data/mongodb/db:/data/db
+    - /home/docker-data/mongodb/db:/data/db
     privileged: true
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
 
-
+  dubbo-admin:
+    container_name: dubbo-admin
+    image: apache/dubbo-admin
+    ports:
+    - 9091:8080
+    environment:
+      - "admin.config-center=zookeeper://192.168.0.106:2181"
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:jdk11
+    ports:
+    - 7071:8080

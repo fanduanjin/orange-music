@@ -13,6 +13,12 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis-plus:
+  global-config:
+    db-config:
+      column-format: "`%s`"
+      id-type: auto
+
 dubbo:
   config-center:
     address: zookeeper://786793.top:2181

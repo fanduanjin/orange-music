@@ -3,12 +3,9 @@ package cn.fan.service.impl;
 import cn.fan.api.music.ISingerService;
 import cn.fan.dao.SingerMapper;
 import cn.fan.model.music.Singer;
-import cn.fan.model.music.SingerExample;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * @program: orange-music
@@ -28,25 +25,23 @@ public class SingerService implements ISingerService {
 
     @Override
     public int remove(int id) {
-        return singerMapper.deleteByPrimaryKey(id);
+        return singerMapper.deleteById(id);
     }
 
     @Override
     public int modify(Singer singer) {
-        return singerMapper.updateByPrimaryKeyWithBLOBs(singer);
+        return singerMapper.updateById(singer);
     }
 
     @Override
     public Singer get(int id) {
-        return singerMapper.selectByPrimaryKey(id);
+        return singerMapper.selectById(id);
     }
 
     @Override
     public Singer getByPlatId(int id) {
-        SingerExample singerExample=new SingerExample();
-        singerExample.createCriteria().andPlatIdEqualTo(id);
-        PageHelper.offsetPage(0,1);
-        List<Singer>  singers= singerMapper.selectByExampleWithBLOBs(singerExample);
-        return singers.isEmpty()?null:singers.get(0);
+        LambdaQueryWrapper<Singer> lambdaQueryWrapper=new LambdaQueryWrapper();
+        lambdaQueryWrapper.eq(Singer::getPlatId,id);
+        return singerMapper.selectOne(lambdaQueryWrapper);
     }
 }

@@ -49,6 +49,7 @@ public class BatchInsertPlugin extends PluginAdapter {
         // 2.设置返回值类型 int类型
         batchInsertMethod.setReturnType(ibsreturnType);
         // 3.设置方法名
+        batchInsertMethod.setAbstract(true);
         // 4.设置参数列表
         FullyQualifiedJavaType paramType = FullyQualifiedJavaType.getNewListInstance();
         FullyQualifiedJavaType paramListType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
@@ -62,6 +63,7 @@ public class BatchInsertPlugin extends PluginAdapter {
         // 2.设置返回值类型int类型
         batchInsertSelectiveMethod.setReturnType(ibsreturnType);
         // 3.设置方法名
+        batchInsertSelectiveMethod.setAbstract(true);
         // 4.设置参数列表
         FullyQualifiedJavaType paramTypeSelective = FullyQualifiedJavaType.getNewListInstance();
         FullyQualifiedJavaType paramListTypeSelective = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());

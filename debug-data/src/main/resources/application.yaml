@@ -8,6 +8,11 @@ spring:
     publisher-returns: true
     username: admin
     password: admin
+    listener:
+      direct:
+        retry:
+          enabled: true
+          max-attempts: 3
   data:
     mongodb:
       uri: mongodb://admin:admin@786793.top:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
