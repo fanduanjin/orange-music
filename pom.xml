@@ -13,7 +13,7 @@
         <module>server-file</module>
         <module>document</module>
         <module>server-common</module>
-        <module>distributed-lock</module>
+        <module>server-distributed-lock</module>
     </modules>
     <groupId>cn.fan</groupId>
 

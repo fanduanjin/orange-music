@@ -1,5 +1,6 @@
 package cn.fan.debugger;
 
+import cn.fan.api.lock.ILock;
 import cn.fan.constant.ConfigConstant;
 import cn.fan.exception.ResponseHandlerException;
 import cn.fan.model.constanst.DebuggerConstant;
@@ -7,6 +8,7 @@ import cn.fan.util.QqEncrypt;
 import cn.fan.util.ResponseHandler;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -42,10 +44,17 @@ public class DebuggerSingerList {
     static final int value_sin = 80;
     static final String param_cur_page = "$cur_page";
 
+    @DubboReference
+    ILock lock;
 
-    @Scheduled(cron = "10 * * * * *")
+    //每日凌晨执行
+    @Scheduled(cron = "0 0 0 * * ?")
+    //@Scheduled(cron = "10 * * * * *")
     public void debugger() {
+        String lockStr="/debugger-singerList";
         try {
+            if (!lock.lock(lockStr))
+                return;
             logger.info("开始爬取歌手列表");
             Connection.Response response = null;
             RequestTemplate requestTemplate = new RequestTemplate();
@@ -70,15 +79,17 @@ public class DebuggerSingerList {
                     int total = jso_data.getIntValue("total");
                     len = ResponseHandler.computePageTotal(total, value_sin);
                 }
-                if (i > 2) {
+                /*if (i > 2) {
                     //测试用 大于2 不用再爬取
                     break;
-                }
+                }*/
                 JSONArray jsa_singerList = jso_data.getJSONArray("singerlist");
                 handlerSingerList(jsa_singerList);
             }
         } catch (Exception exception) {
             logger.error(exception.toString());
+        }finally {
+            lock.unlock(lockStr);
         }
     }
 
@@ -88,7 +99,7 @@ public class DebuggerSingerList {
             jsonObject = (JSONObject) iterator.next();
             String singer_mid = jsonObject.getString("singer_mid");
             //取除mid 爬取歌手详细信息
-            logger.info("send "+DebuggerConstant.queue_singer_detail+":"+singer_mid);
+            logger.info("send " + DebuggerConstant.queue_singer_detail + ":" + singer_mid);
             rabbitTemplate.convertAndSend(DebuggerConstant.queue_singer_detail, singer_mid);
         }
     }
