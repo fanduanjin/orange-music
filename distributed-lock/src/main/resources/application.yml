@@ -1,0 +1,8 @@
+dubbo:
+  config-center:
+    address: zookeeper://786793.top:2181
+  application:
+    name: server-music
+spring:
+  application:
+    name: distributed-lock

@@ -6,6 +6,7 @@ import cn.fan.model.music.Singer;
 import cn.fan.model.constanst.DebuggerConstant;
 import cn.fan.util.QqEncrypt;
 import cn.fan.util.ResponseHandler;
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
@@ -19,6 +20,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -90,5 +92,8 @@ public class DebuggerSongList {
             rabbitTemplate.convertAndSend(DebuggerConstant.queue_song_detail,song_mid);
         }
     }
+
+
+
 
 }

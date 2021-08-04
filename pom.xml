@@ -13,6 +13,7 @@
         <module>server-file</module>
         <module>document</module>
         <module>server-common</module>
+        <module>distributed-lock</module>
     </modules>
     <groupId>cn.fan</groupId>
 
@@ -23,6 +24,22 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <!-- 是否开启发布版构件下载 -->
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <!-- 是否开启快照版构件下载 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <properties>
         <mybatis.version>2.1.4</mybatis.version>
         <dubbo.version>2.7.10</dubbo.version>
@@ -50,11 +67,11 @@
                 <version>2.4.4</version>
             </dependency>
 
-        <!--    <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper.version}</version>
-            </dependency>-->
+            <!--    <dependency>
+                    <groupId>com.github.pagehelper</groupId>
+                    <artifactId>pagehelper-spring-boot-starter</artifactId>
+                    <version>${pagehelper.version}</version>
+                </dependency>-->
 
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
