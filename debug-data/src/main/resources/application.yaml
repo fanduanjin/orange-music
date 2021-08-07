@@ -4,7 +4,7 @@ spring:
     workerId: 1
     datacenterId: 1
   rabbitmq:
-    addresses: 786793.top:5672
+    addresses: jlht.icu:5672
     publisher-returns: true
     username: admin
     password: admin
@@ -15,10 +15,10 @@ spring:
           max-attempts: 3
   data:
     mongodb:
-      uri: mongodb://admin:admin@786793.top:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+      uri: mongodb://admin:admin@jlht.icu:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
       database: debugger_music
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 dubbo:
   config-center:
-    address: zookeeper://786793.top:2181
+    address: zookeeper://jlht.icu:2181

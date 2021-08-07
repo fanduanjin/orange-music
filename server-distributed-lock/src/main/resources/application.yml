@@ -1,6 +1,6 @@
 dubbo:
   config-center:
-    address: zookeeper://786793.top:2181
+    address: zookeeper://jlht.icu:2181
   application:
     name: server-music
 spring:

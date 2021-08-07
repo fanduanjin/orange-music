@@ -48,7 +48,7 @@ public class ZKDistributedLock implements ILock {
     CuratorFramework curatorFramework() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .connectString("786793.top")
+                .connectString("jlht.icu")
                 .sessionTimeoutMs(3000)
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)

@@ -3,7 +3,7 @@ spring:
     name: server-music
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://786793.top:3306/orange_music
+    url: jdbc:mysql://jlht.icu:3306/orange_music
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,6 +21,6 @@ mybatis-plus:
 
 dubbo:
   config-center:
-    address: zookeeper://786793.top:2181
+    address: zookeeper://jlht.icu:2181
   application:
     name: server-music
