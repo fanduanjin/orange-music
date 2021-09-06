@@ -1,10 +1,9 @@
-package cn.fan.consumer;
+package cn.fan.debugger;
 
 import cn.fan.api.file.IFileService;
 import cn.fan.api.file.IResourceService;
 import cn.fan.model.constanst.DebuggerConstant;
 import cn.fan.model.file.Resource;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import com.alibaba.fastjson.JSON;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

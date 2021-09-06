@@ -23,7 +23,9 @@ public class FileServiceTest {
 
     @Test
     public void upload(){
+
         String path= fileService.uploadFile("fdsfs".getBytes(StandardCharsets.UTF_8),"txt");
+        System.out.println(path);
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.fan;
 
+import cn.fan.model.constanst.DebuggerConstant;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ import java.io.IOException;
 @SpringBootApplication
 @EnableScheduling
 public class AppDebugData {
+
     public static void main(String[] args) {
         SpringApplication.run(AppDebugData.class,args);
         try {

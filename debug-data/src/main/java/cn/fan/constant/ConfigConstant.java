@@ -30,4 +30,6 @@ public class ConfigConstant {
     public static final char[] dir = "0234567890abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public static final String comm="{\"ct\":24,\"cv\":0}";
+
+    public  static final  String maxProcess= String.valueOf(Runtime.getRuntime().availableProcessors()+1);
 }

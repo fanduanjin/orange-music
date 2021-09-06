@@ -6,65 +6,71 @@ services:
     #firewall-cmd --reload
     image: mysql
     container_name: mysql
-    expose:
-      - 3306
+    restart: always
     ports:
-    - 3306:3306
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
-    privileged: "true"
+    privileged: true
+    #GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+    #flush privileges;
     volumes:
-    - /home/docker-data/mysql/my.cnf:/etc/mysql/my.cnf
-    - /home/docker-data/mysql/lib:/var/lib/mysql
+      - /docker-data/mysql/my.cnf:/etc/mysql/my.cnf
+      - /docker-data/mysql/lib:/var/lib/mysql
+      - /docker-data/mysql/myslq-files:/var/lib/mysql-files
   fastdfs_tracker:
     container_name: fastdfs_tracker
     image: season/fastdfs
     network_mode: host
     privileged: true
+    restart: always
     volumes:
-    - /home/docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
-    - /home/docker-data/fastdfs/tracker/client.conf:/etc/fdfs/client.conf
+      - /docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
+      - /docker-data/fastdfs/tracker/client.conf:/etc/fdfs/client.conf
     command: tracker
   fastdfs_storage:
     container_name: fastdfs_storage
     image: season/fastdfs
     network_mode: host
+    restart: always
     volumes:
-    - /home/docker-data/fastdfs/storage/data:/fastdfs/storage/data
-    - /home/docker-data/fastdfs/storage/path:/fastdfs/store_path
+      - /docker-data/fastdfs/storage/data:/fastdfs/storage/data
+      - /docker-data/fastdfs/storage/path:/fastdfs/store_path
     privileged: true
     environment:
-      - TRACKER_SERVER=192.168.0.106:22122
+      - TRACKER_SERVER=jlht.icu:22122
     command: storage
   fastdfs_nginx:
     container_name: fastdfs_nginx
     image: season/fastdfs:1.2
     privileged: true
+    restart: always
     network_mode: host
     volumes:
-    - /home/docker-data/fastdfs/storage/path:/fastdfs/store_path
-    - /home/docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
+      - /docker-data/fastdfs/storage/path:/fastdfs/store_path
+      - /docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
     environment:
-      - TRACKER_SERVER=localhost:22122
+      - TRACKER_SERVER=jlht.icu:22122
     command: nginx
   redis:
     image: redis
     container_name: redis
-    expose:
-      - 6379
+    restart: always
     ports:
-    - 6379:6379
+      - 6379:6379
   zookeeper:
+    restart: always
     image: zookeeper
     container_name: zookeeper
     ports:
-    - 2181:2181
+      - 2181:2181
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
+    restart: always
     ports:
-    - 5672:5672
-    - 15672:15672
+      - 5672:5672
+      - 15672:15672
     environment:
       - "RABBITMQ_DEFAULT_USER=admin"
       - "RABBITMQ_DEFAULT_PASS=admin"
@@ -72,23 +78,25 @@ services:
     image: mongo
     container_name: mongodb
     ports:
-    - 27017:27017
+      - 27017:27017
     volumes:
-    - /home/docker-data/mongodb/db:/data/db
+      - /docker-data/mongodb/db:/data/db
     privileged: true
+    restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
-
   dubbo-admin:
     container_name: dubbo-admin
-    image: apache/dubbo-admin
+    image: apache/dubbo-admin:latest
+    restart: always
     ports:
-    - 9091:8080
+      - 9091:8080
     environment:
-      - "admin.config-center=zookeeper://jlht.icu:2181"
+      - "admin.config-center=zookeeper://786793.top:2181"
   jenkins:
+    restart: always
     container_name: jenkins
     image: jenkins/jenkins:jdk11
     ports:
-    - 7071:8080
+      - 7071:8080

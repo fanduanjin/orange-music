@@ -1,4 +1,4 @@
-package cn.fan.debugger;
+package cn.fan.util;
 
 
 import cn.fan.constant.ConfigConstant;

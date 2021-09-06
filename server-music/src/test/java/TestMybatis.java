@@ -18,7 +18,8 @@ public class TestMybatis {
 
     @Test
     public void test(){
-        singerService.get(0);
-        System.out.println("success");
+        long time=System.currentTimeMillis();
+        singerService.getByPlatId(4607);
+        System.out.println("使用时间 : "+(System.currentTimeMillis()-time));
     }
 }

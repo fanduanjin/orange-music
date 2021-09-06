@@ -1,3 +1,5 @@
+ ##drop DATABASE orange_music;
+
 create database orange_music;
 use orange_music;
 
@@ -45,6 +47,7 @@ create table song(
 );
 alter table song add COLUMN lrc Text;
 alter table song add media_resource_id BIGINT UNSIGNED;
+alter table song add index index_plat_id(play_id);
 
 create table property(
  id int UNSIGNED auto_increment PRIMARY key ,
@@ -54,13 +57,19 @@ create table property(
  `value` Text
 );
  SHOW TABLES
- 
+
 select * from singer WHERE plat_id=19851
 
 select count(1) from singer
 select count(1) from song
 
 
+select * from song where count(plat_id)>1
+
 select * from song;
+
+delete from song where plat_id in(select plat_Id from (select plat_id from song GROUP BY plat_id  HAVING count(plat_id)>1) t1)
+
+delete from singer where plat_id ='5512'
  
  

@@ -1,8 +1,11 @@
 dubbo:
   config-center:
-    address: zookeeper://jlht.icu:2181
+    address: zookeeper://786793.top:2181
   application:
-    name: server-music
+    name: server-musicdistributed-lock
 spring:
   application:
     name: distributed-lock
+  aop:
+    auto: true
+    proxy-target-class: true

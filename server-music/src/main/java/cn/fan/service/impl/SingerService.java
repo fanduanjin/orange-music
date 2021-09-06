@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * @program: orange-music
  * @description:
@@ -42,6 +44,10 @@ public class SingerService implements ISingerService {
     public Singer getByPlatId(int id) {
         LambdaQueryWrapper<Singer> lambdaQueryWrapper=new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Singer::getPlatId,id);
-        return singerMapper.selectOne(lambdaQueryWrapper);
+        List<Singer> singers=singerMapper.selectList(lambdaQueryWrapper);
+        if(singers!=null&&!singers.isEmpty()){
+            return singers.get(0);
+        }
+        return null;
     }
 }

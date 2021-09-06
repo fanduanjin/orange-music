@@ -25,7 +25,8 @@ public class ZKDistributedLock implements ILock {
     @Override
     public boolean lock(String path) {
         try {
-            curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
+            //curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
+            curatorFramework.create().creatingParentsIfNeeded().forPath(path);
         } catch (Exception e) {
             LOGGER.error(e.getLocalizedMessage());
             return false;
@@ -48,7 +49,7 @@ public class ZKDistributedLock implements ILock {
     CuratorFramework curatorFramework() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .connectString("jlht.icu")
+                .connectString("786793.top")
                 .sessionTimeoutMs(3000)
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)

@@ -16,5 +16,4 @@ public class DebuggerConstant {
     public static final String queue_song_list="song_list";
     public static  final String queue_song_detail="song_detail";
     public static final String queue_dowload_resource="dowload_resource";
-
 }

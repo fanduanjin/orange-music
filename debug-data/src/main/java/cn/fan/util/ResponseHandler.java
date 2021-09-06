@@ -1,6 +1,6 @@
 package cn.fan.util;
 
-import cn.fan.exception.ResponseHandlerException;
+import cn.fan.exception.ResponseExceptionJsonObject;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
@@ -16,28 +16,36 @@ import org.slf4j.LoggerFactory;
 public class ResponseHandler {
     public static final Logger LOGGER = LoggerFactory.getLogger(ResponseHandler.class);
 
-    public static JSONObject getData(Connection.Response response, String group) {
+
+    /**
+     * 处理返回数据 有异常返回null
+     * @param request
+     * @param response
+     * @param group
+     * @return
+     */
+    public static JSONObject getData(Connection.Request request, Connection.Response response, String group) {
         String body = response.body();
+        ResponseExceptionJsonObject responseExceptionJsonObject = new ResponseExceptionJsonObject();
+        responseExceptionJsonObject.setUrl(request.url().toString());
+        responseExceptionJsonObject.setData(request.postDataCharset());
+        responseExceptionJsonObject.setResponseBody(body);
         if (body == null || body.isEmpty()) {
-            throw new ResponseHandlerException("debugger result is emplty");
+            responseExceptionJsonObject.setMsg("debugger result is empty");
+            LOGGER.error(JSON.toJSONString(responseExceptionJsonObject));
+            return null;
         }
-        LOGGER.info(body);
         JSONObject root = JSON.parseObject(body);
         //获取接口状态码
         int code = root.getIntValue("code");
         if (code != 0) {
             //状态码不等于0 调用接口失败
-            throw new ResponseHandlerException("code faild : " + body);
+            responseExceptionJsonObject.setMsg("result code error " + code);
+            LOGGER.error(JSON.toJSONString(responseExceptionJsonObject));
+            return null;
         }
         //开始解析数据 返回JSONObject 类型对象
+        LOGGER.info(JSON.toJSONString(responseExceptionJsonObject));
         return root.getJSONObject(group);
-    }
-
-    public static int computePageTotal(int total, int size) {
-        int pageTotal = total / size;
-        if (total % size != 0) {
-            pageTotal++;
-        }
-        return pageTotal;
     }
 }

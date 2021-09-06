@@ -1,10 +1,8 @@
 package cn.fan.util;
 
-import cn.fan.exception.ResponseHandlerException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
-import org.jsoup.helper.HttpConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +17,10 @@ public class LrcResponseHandler {
             return "";
         }
         if (resultCode!= 0) {
-            throw new ResponseHandlerException("get lrc faild !" + response.body());
+            LOGGER.error("get lrc faild !" + response.body());
+            return "";
         }
+        LOGGER.info(response.body());
         return jo_result.getString("lyric");
     }
 }
