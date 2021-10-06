@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @program: orange-music
@@ -29,13 +30,6 @@ import java.text.SimpleDateFormat;
 public class DebuggerSingerDetail {
     private static final Logger LOGGER = LoggerFactory.getLogger(DebuggerSingerDetail.class);
 
-/*
-
-    @Value("${spring.application.workerId}")
-    private int workerId;
-    @Value("${spring.application.datacenterId}")
-    private int datacenterId;
-*/
 
     private static final String param_template = "{\"singer_mids\": [\"$singer_mid\"],\"ex_singer\": 1,\"wiki_singer\": 1,\"group_singer\": 1,\"pic\": 1,\"photos\": 1}";
     private static final String method = "GetSingerDetail";
@@ -86,8 +80,11 @@ public class DebuggerSingerDetail {
         singer.setForeignName(jo_ex_info.getString("foreign_name"));
         try {
             singer.setBirthday(jo_ex_info.getDate("birthday"));
-        } catch (NumberFormatException e) {
-            FastDateFormat.getInstance().parse(jo_ex_info.getString("birthday"));
+        } catch (Exception e) {
+            //时间转换 可能有bug 201/01/01
+            String date=jo_ex_info.getString("birthday").replaceAll("/","-");
+            Date birthday= FastDateFormat.getInstance("YY-MM-DD").parse(date);
+            singer.setBirthday(birthday);
         }
         //wiki 处理 wiki
         singer.setWiki(jo_singerDetail.getString("wiki"));

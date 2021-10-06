@@ -1,6 +1,7 @@
 package cn.fan.api.common;
 
 import cn.fan.model.common.Property;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author: fanduanjin
  * @create: 2021-05-09 19:10
  */
-public interface IPropertyService {
+public interface IPropertyService extends IService<Property> {
     /**
      * 插入
      * @param property

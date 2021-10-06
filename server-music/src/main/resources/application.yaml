@@ -7,6 +7,15 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+     filter:
+       log4j2:
+         enabled: true
+         statement-create-after-log-enabled: false
+         statement-close-after-log-enabled: false
+         result-set-close-after-log-enabled: false
+         result-set-open-after-log-enabled: false
+         statement-executable-sql-log-enable: true
   aop:
     auto: true
     proxy-target-class: true

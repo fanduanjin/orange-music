@@ -11,4 +11,6 @@ import java.io.InputStream;
 public interface IFileService {
 
     public String uploadFile(byte[] bytes,String fileSuffix);
+
+    void deleteFile(String path);
 }

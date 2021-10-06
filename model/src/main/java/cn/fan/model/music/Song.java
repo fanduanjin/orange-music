@@ -13,6 +13,9 @@ public class Song implements Serializable {
 
     private Integer id;
 
+    private Integer singerId;
+
+    private Integer singerPlatId;
 
     private Integer type;
 
@@ -54,6 +57,8 @@ public class Song implements Serializable {
 
     private Long mediaResourceId;
 
+    @TableField(exist = false)
+    private String mediaPath;
 
     private String lrc;
 

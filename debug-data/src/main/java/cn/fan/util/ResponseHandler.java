@@ -32,7 +32,8 @@ public class ResponseHandler {
         responseExceptionJsonObject.setResponseBody(body);
         if (body == null || body.isEmpty()) {
             responseExceptionJsonObject.setMsg("debugger result is empty");
-            LOGGER.error(JSON.toJSONString(responseExceptionJsonObject));
+            responseExceptionJsonObject.setResponseBody(response.body());
+            LOGGER.warn(JSON.toJSONString(responseExceptionJsonObject));
             return null;
         }
         JSONObject root = JSON.parseObject(body);
@@ -41,11 +42,11 @@ public class ResponseHandler {
         if (code != 0) {
             //状态码不等于0 调用接口失败
             responseExceptionJsonObject.setMsg("result code error " + code);
-            LOGGER.error(JSON.toJSONString(responseExceptionJsonObject));
+            LOGGER.warn(JSON.toJSONString(responseExceptionJsonObject));
             return null;
         }
         //开始解析数据 返回JSONObject 类型对象
-        LOGGER.info(JSON.toJSONString(responseExceptionJsonObject));
+        //LOGGER.info(JSON.toJSONString(responseExceptionJsonObject));
         return root.getJSONObject(group);
     }
 }

@@ -23,6 +23,8 @@ public class PropetyService extends ServiceImpl<PropertyMapper,Property> impleme
     @Autowired
     private PropertyMapper propertyMapper;
 
+    @Autowired
+    IPropertyService propertyService;
 
     @Override
     public int insert(Property property) {

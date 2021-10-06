@@ -12,8 +12,12 @@ public class DebuggerConstant {
 
 
     public static final String queue_singer_list = "singer_list";
-    public static final String queue_singer_detail="singer_detail";
-    public static final String queue_song_list="song_list";
-    public static  final String queue_song_detail="song_detail";
-    public static final String queue_dowload_resource="dowload_resource";
+    public static final String queue_singer_detail = "singer_detail";
+    public static final String queue_song_list = "song_list";
+    public static final String queue_song_detail = "song_detail";
+    public static final String queue_download_resource = "download_resource";
+    public static final String queue_check_resource_modify="check_resource_modify";
+    public static final String mq_message_join_charter="!@#";
+
+
 }

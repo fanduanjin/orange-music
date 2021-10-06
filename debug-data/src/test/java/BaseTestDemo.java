@@ -93,7 +93,7 @@ public class BaseTestDemo {
 
     @Test
     public void debuggerSingerDetail() throws IOException, ParseException {
-        String singer_mid = "000aw4WC2EQYTv";
+        String singer_mid = "000OG0wK0vlC0D";
         Singer singer= debuggerSingerDetail.debugger(singer_mid);
         Singer singer_db=singerService.getByPlatId(singer.getPlatId());
         singer.setId(singer_db.getId());
@@ -122,7 +122,7 @@ public class BaseTestDemo {
         debuggerSongList.debugger(singer, new DebuggerSongList.ResultHandler() {
             @Override
             public void handler(List<Song> songs) {
-                System.out.println("success");
+                System.out.println(JSON.toJSONString(songs));
             }
         });
     }
@@ -134,10 +134,10 @@ public class BaseTestDemo {
         song.setMid(song_mid);
         Song song1= debuggerSongDetail.debugger(song, new DebuggerSongDetail.ResultHandler() {
             @Override
-            public void handler() {
-                System.out.println("success");
+            public void handler(Song result) {
             }
         });
+        System.out.println(JSON.toJSONString(song1));
     }
 
     @Test

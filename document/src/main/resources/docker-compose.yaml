@@ -1,9 +1,6 @@
 version: "3.7"
 services:
   mysql:
-    #bind-address=0.0.0.0
-    #firewall-cmd --zone=public --add-port=80/tcp --permanent
-    #firewall-cmd --reload
     image: mysql
     container_name: mysql
     restart: always
@@ -12,8 +9,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     privileged: true
-    #GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-    #flush privileges;
     volumes:
       - /docker-data/mysql/my.cnf:/etc/mysql/my.cnf
       - /docker-data/mysql/lib:/var/lib/mysql
@@ -42,7 +37,7 @@ services:
     command: storage
   fastdfs_nginx:
     container_name: fastdfs_nginx
-    image: season/fastdfs:1.2
+    image: season/fastdfs
     privileged: true
     restart: always
     network_mode: host

@@ -1,6 +1,7 @@
 package cn.fan.api.music;
 
 import cn.fan.model.music.Singer;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @program: orange-music
@@ -8,7 +9,7 @@ import cn.fan.model.music.Singer;
  * @author: fanduanjin
  * @create: 2021-04-17 16:35
  */
-public interface ISingerService {
+public interface ISingerService extends IService<Singer> {
 
     /**
      * 插入
@@ -44,5 +45,7 @@ public interface ISingerService {
      * @return
      */
     Singer getByPlatId(int id);
+
+    boolean existsByPlayId(int platId);
 
 }

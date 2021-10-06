@@ -1,12 +1,17 @@
 package cn.fan;
 
+import org.apache.dubbo.common.serialize.support.SerializationOptimizer;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @program: orange-music
@@ -27,4 +32,5 @@ public class AppMusic {
             exception.printStackTrace();
         }
     }
+
 }

@@ -36,4 +36,9 @@ public class FileService implements IFileService {
         logger.info("上传成功:"+storePath.getFullPath());
         return storePath.getFullPath();
     }
+
+    @Override
+    public void deleteFile(String path) {
+        storageClient.deleteFile(path);
+    }
 }

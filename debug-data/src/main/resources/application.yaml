@@ -14,8 +14,8 @@ spring:
           enabled: true
           max-attempts: 3
       simple:
-        concurrency: 9
-        max-concurrency: 20
+        concurrency: 16
+        prefetch: 32
   data:
     mongodb:
       uri: mongodb://admin:admin@jlht.icu:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false

@@ -1,6 +1,7 @@
 package cn.fan.api.file;
 
 import cn.fan.model.file.Resource;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @program: orange-music
@@ -8,7 +9,7 @@ import cn.fan.model.file.Resource;
  * @author: fanduanjin
  * @create: 2021-05-09 14:20
  */
-public interface IResourceService {
+public interface IResourceService extends IService<Resource> {
     /**
      * 插入
      * @param resource

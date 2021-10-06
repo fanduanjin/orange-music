@@ -55,6 +55,13 @@ public class DebuggerSongDetail {
     @Autowired
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+    /**
+     * 多线程 爬取 歌曲详情 歌词 audio资源路径
+     *
+     * @param song
+     * @param resultHandler
+     * @return
+     */
     public Song debugger(Song song, ResultHandler resultHandler) {
         CompletableFuture<Song> songCompletableFuture = CompletableFuture.supplyAsync(() -> {
             Song result = null;
@@ -92,7 +99,7 @@ public class DebuggerSongDetail {
         try {
             result = songCompletableFuture.get();
             result.setLrc(lrcCompletableFuture.get());
-            String medialFilePaht = mediaUrlCompletableFuture.get();
+            result.setMediaPath(mediaUrlCompletableFuture.get());
         } catch (InterruptedException e) {
             LOGGER.error(e.toString());
             return null;
@@ -100,7 +107,7 @@ public class DebuggerSongDetail {
             LOGGER.error(e.toString());
             return null;
         }
-        resultHandler.handler();
+        resultHandler.handler(result);
         return result;
     }
 
@@ -168,7 +175,7 @@ public class DebuggerSongDetail {
     }
 
     public interface ResultHandler {
-        void handler();
+        void handler(Song result);
     }
 
 }

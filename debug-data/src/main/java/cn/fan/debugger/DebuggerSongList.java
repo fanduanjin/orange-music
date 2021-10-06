@@ -78,26 +78,30 @@ public class DebuggerSongList {
         List<Song> songs = handlerSongList(jsa_songList);
         resultHandler.handler(songs);
         songNum.set(songs.size());
-        List<CompletableFuture<Integer>> futures=new ArrayList<>(totalPage);
+        List<CompletableFuture<Integer>> futures = new ArrayList<>(totalPage);
         for (int i = 2; i <= totalPage; i++) {
             int finalI = i;
             CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
                 List<Song> songs1 = null;
                 try {
                     songs1 = debugger(singer.getMid(), finalI);
-                } catch (IOException e) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                     LOGGER.error(e.toString());
                     return 0;
                 }
                 resultHandler.handler(songs1);
-                return songs1.size();
+                return songs1 == null ? 0 : songs1.size();
             }, threadPoolTaskExecutor);
+            future.exceptionally((e) -> {
+                LOGGER.warn(e.toString());
+                return 0;
+            });
             futures.add(future);
         }
-        for(CompletableFuture<Integer> future:futures){
+        for (CompletableFuture<Integer> future : futures) {
             try {
-                songNum.set(future.get()+songNum.get());
-                System.out.println(songNum.get());
+                songNum.set(future.get() + songNum.get());
             } catch (InterruptedException e) {
                 LOGGER.error(e.toString());
             } catch (ExecutionException e) {
@@ -105,7 +109,7 @@ public class DebuggerSongList {
             }
         }
         LOGGER.info(singer.getMid() + ":" + singer.getName() + "  歌曲总数:" + totalNum + "  爬取总数" + songNum.get());
-
+        songNum.remove();
     }
 
     List<Song> debugger(String singer_mid, int pageIndex) throws IOException {
@@ -121,7 +125,11 @@ public class DebuggerSongList {
         Connection.Request request = connection.request();
         Connection.Response response = connection.execute();
         JSONObject root = ResponseHandler.getData(request, response, group);
+        if (root==null)
+            return null;
         JSONObject jso_data = root.getJSONObject("data");
+        if (root == null||jso_data==null)
+            return null;
         JSONArray jsa_songList = jso_data.getJSONArray("songList");
         List<Song> songs = handlerSongList(jsa_songList);
         return songs;

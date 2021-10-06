@@ -4,6 +4,7 @@ import cn.fan.api.music.ISingerService;
 import cn.fan.dao.SingerMapper;
 import cn.fan.model.music.Singer;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,9 +18,10 @@ import java.util.List;
  */
 
 @DubboService
-public class SingerService implements ISingerService {
+public class SingerService extends ServiceImpl<SingerMapper, Singer> implements ISingerService {
     @Autowired
     SingerMapper singerMapper;
+
     @Override
     public int insert(Singer singer) {
         return singerMapper.insert(singer);
@@ -42,12 +44,16 @@ public class SingerService implements ISingerService {
 
     @Override
     public Singer getByPlatId(int id) {
-        LambdaQueryWrapper<Singer> lambdaQueryWrapper=new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Singer::getPlatId,id);
-        List<Singer> singers=singerMapper.selectList(lambdaQueryWrapper);
-        if(singers!=null&&!singers.isEmpty()){
-            return singers.get(0);
-        }
-        return null;
+        LambdaQueryWrapper<Singer> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.eq(Singer::getPlatId, id);
+        Singer singer = singerMapper.selectOne(lambdaQueryWrapper);
+        return singer;
+    }
+
+    public boolean existsByPlayId(int platId) {
+        LambdaQueryWrapper<Singer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Singer::getPlatId, platId);
+        int count = singerMapper.selectCount(lambdaQueryWrapper);
+        return count > 0;
     }
 }

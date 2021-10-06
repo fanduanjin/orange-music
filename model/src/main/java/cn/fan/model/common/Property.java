@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class Property implements Serializable {
+public class Property implements Serializable{
 
     private Integer id;
 

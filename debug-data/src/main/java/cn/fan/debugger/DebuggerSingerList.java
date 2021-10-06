@@ -101,7 +101,7 @@ public class DebuggerSingerList {
                 LOGGER.error(e.toString());
             }
         }
-        LOGGER.info("总爬取数量 :" + total + "总页数 :" + pageTotal);
+        LOGGER.info("歌曲总数" + singerTotal + "总爬取数量 :" + total + "总页数 :" + pageTotal);
     }
 
     public JSONObject debugger(int pageIndex) throws IOException {
