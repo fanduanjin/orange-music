@@ -6,17 +6,21 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+/**
+ * @program: orange-music
+ * @description:
+ * @author: fanduanjin
+ * @create: 2021-04-16 15:36
+ */
 @DubboService
 @Configuration
-public class ZKDistributedLock implements ILock {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ZKDistributedLock.class);
+public class ZkDistributeLock implements ILock {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZkDistributeLock.class);
 
     @Autowired
     private CuratorFramework curatorFramework;
@@ -49,7 +53,7 @@ public class ZKDistributedLock implements ILock {
     CuratorFramework curatorFramework() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .connectString("786793.top")
+                .connectString("r730.host")
                 .sessionTimeoutMs(3000)
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)

@@ -3,7 +3,12 @@ package cn.fan.model.file;
 import lombok.Data;
 
 import java.io.Serializable;
-
+/**
+ * @program: orange-music
+ * @description:
+ * @author: fanduanjin
+ * @create: 2021-04-16 15:36
+ */
 @Data
 public class Resource implements Serializable {
 
@@ -17,9 +22,6 @@ public class Resource implements Serializable {
 
 
     private String dfsPath;
-
-
-    private static final long serialVersionUID = 1L;
 
 
 }

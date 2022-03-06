@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fan.dao.SingerMapper">
+    <!-->
+        column 列表
+        PS:修改后检查 所有update 语句确认是否也修改
+    <-->
+    <sql id="col">
+        pid
+                ,id,`name` ,mid,type,`desc` ,foreignName ,birthday,wiki,pic
+    </sql>
+
+    <!-->表名<-->
+    <sql id="table">
+        singer
+    </sql>
+
+    <!-->
+        基础resultMap
+        不含二级查找
+    <-->
+    <resultMap id="baseResultMap" type="cn.fan.model.music.Singer">
+        <result property="pid" column="pid"></result>
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="mid" column="mid"></result>
+        <result property="type" column="type"></result>
+        <result property="desc" column="desc"></result>
+        <result property="foreignName" column="foreignName"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="wiki" column="wiki"></result>
+        <result property="pic" column="pic"></result>
+    </resultMap>
+
+    <!--增加一条记录-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert
+        <include refid="table">
+        </include>
+        ( <include refid="col">
+    </include> )
+        values (default ,#{id} ,#{name},#{mid},#{type},#{desc},#{foreignName},#{birthday},#{wiki},#{pic})
+    </insert>
+
+    <!--根据主键id删除记录-->
+    <delete id="delete">
+        delete from
+        <include refid="table">
+        </include>
+        where pid=#{pid}
+    </delete>
+
+    <!--根据主键修改记录 更新所有列 不做数据验证-->
+    <update id="update">
+        update
+        <include refid="table">
+        </include>
+        set
+        name=#{name},mid=#{mid},`type`=#{type},`desc`=#{desc},foreignName=#{foreignName},
+        birthday=#{birthday},wiki=#{wiki},pic=#{pic}
+        where pid=#{pid}
+    </update>
+
+    <!--根据主键查询记录-->
+    <select id="selectOne" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where pid=#{pid}
+    </select>
+
+    <!--查询集合  startIndex,pageSize -->
+    <select id="selectList" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="getCountById" resultType="int">
+        select count(id) from
+        <include refid="table">
+        </include>
+        where `id`=#{id}
+    </select>
+
+    <select id="selectOneById" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where id=#{id}
+        limit 1
+    </select>
+</mapper>

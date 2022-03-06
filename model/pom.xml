@@ -17,11 +17,6 @@
             <artifactId>spring-data-mongodb</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 </project>

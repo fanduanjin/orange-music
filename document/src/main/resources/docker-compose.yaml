@@ -12,41 +12,18 @@ services:
     volumes:
       - /docker-data/mysql/my.cnf:/etc/mysql/my.cnf
       - /docker-data/mysql/lib:/var/lib/mysql
-      - /docker-data/mysql/myslq-files:/var/lib/mysql-files
-  fastdfs_tracker:
-    container_name: fastdfs_tracker
-    image: season/fastdfs
-    network_mode: host
+      - /docker-data/mysql/mysql-files:/var/lib/mysql-files
+  shardingsphere-proxy:
+    container_name: shardingsphere-proxy
+    image: apache/shardingsphere-proxy
     privileged: true
     restart: always
-    volumes:
-      - /docker-data/fastdfs/tracker/data:/fastdfs/tracker/data
-      - /docker-data/fastdfs/tracker/client.conf:/etc/fdfs/client.conf
-    command: tracker
-  fastdfs_storage:
-    container_name: fastdfs_storage
-    image: season/fastdfs
     network_mode: host
-    restart: always
-    volumes:
-      - /docker-data/fastdfs/storage/data:/fastdfs/storage/data
-      - /docker-data/fastdfs/storage/path:/fastdfs/store_path
-    privileged: true
     environment:
-      - TRACKER_SERVER=jlht.icu:22122
-    command: storage
-  fastdfs_nginx:
-    container_name: fastdfs_nginx
-    image: season/fastdfs
-    privileged: true
-    restart: always
-    network_mode: host
+      - PORT=3308
     volumes:
-      - /docker-data/fastdfs/storage/path:/fastdfs/store_path
-      - /docker-data/fastdfs/nginx/nginx.conf:/etc/nginx/conf/nginx.conf
-    environment:
-      - TRACKER_SERVER=jlht.icu:22122
-    command: nginx
+    - /docker-data/shardingsphere-proxy/conf:/opt/shardingsphere-proxy/conf
+    - /docker-data/shardingsphere-proxy/ext-lib:/opt/shardingsphere-proxy/ext-lib
   redis:
     image: redis
     container_name: redis
@@ -95,3 +72,15 @@ services:
     image: jenkins/jenkins:jdk11
     ports:
       - 7071:8080
+
+  minio:
+    restart: always
+    container_name: minio
+    image: minio/minio
+    ports:
+    - 9000:9000
+    - 9001:9001
+    volumes:
+    - /docker-data/minio/data:/data
+    - /dokcer-data/minio/config:/root/.minio
+    command: server /data --console-address '0.0.0.0:9001'

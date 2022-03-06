@@ -1,70 +1,83 @@
 package cn.fan.model.music;
 
 import cn.fan.model.common.Property;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * @program: orange-music
+ * @description:
+ * @author: fanduanjin
+ * @create: 2021-04-16 15:36
+ */
 @Data
 public class Song implements Serializable {
+    /**
+     * 主键
+     */
+    private int pid;
 
-    private Integer id;
+    /**
+     * 平台id
+     */
+    private int id;
 
-    private Integer singerId;
+    /**
+     * 扩展名称 ***主题曲
+     */
+    private String extraName;
 
-    private Integer singerPlatId;
-
-    private Integer type;
-
-
+    /**
+     * 平台mid
+     */
     private String mid;
 
-
-    private Integer platId;
-
-
-    private String name;
-
-
+    /**
+     * 标题
+     */
     private String title;
 
-
+    /**
+     * 长标题|扩展标题
+     */
     private String subTitle;
 
+    /**
+     * 专辑id（平台）
+     */
+    private int albumId;
 
-    private Integer albumPlatId;
+    /**
+     * 专辑mid
+     */
+    private String albumMid;
 
+    /**
+     * MV id（平台）
+     */
+    private int mvId;
 
-    private String mvid;
+    /**
+     * MV mid
+     */
+    private String mvMid;
 
-    private Integer language;
-
-
-    private Integer genre;
-
-
+    /**
+     * 发布时间
+     */
     private Date publicTime;
 
-
-    private Boolean pricePlay;
-
-
-    private String mediaMid;
-
-
-    private Long mediaResourceId;
-
-    @TableField(exist = false)
-    private String mediaPath;
-
+    /**
+     * 歌词 MD5
+     */
     private String lrc;
 
-    @TableField(exist = false)
-    private List<Property> properties;
-
-    private static final long serialVersionUID = 1L;
+    /**
+     * 歌曲文件路径 （云路径）
+     */
+    private String mediaUrl;
 
 }

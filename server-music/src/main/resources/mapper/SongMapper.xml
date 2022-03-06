@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fan.dao.SongMapper">
+    <!-->
+        column 列表
+        PS:修改后检查 所有update 语句确认是否也修改
+    <-->
+    <sql id="col">
+        pid
+                ,id,extraName,mid,title,subTitle,albumid,albumMid,mvId,mvMid,publicTime,
+        lrc,mediaUrl
+    </sql>
+
+    <!-->表名<-->
+    <sql id="table">
+        `song`
+    </sql>
+
+    <!-->
+        基础resultMap
+        不含二级查找
+    <-->
+    <resultMap id="baseResultMap" type="cn.fan.model.music.Song">
+        <result property="pid" column="pid"></result>
+        <result property="id" column="id"></result>
+        <result property="extraName" column="extraName"></result>
+        <result property="mid" column="mid"></result>
+        <result property="title" column="title"></result>
+        <result property="subTitle" column="subTitle"></result>
+        <result property="albumId" column="albumId"></result>
+        <result property="albumMid" column="albumMid"></result>
+        <result property="mvId" column="mvId"></result>
+        <result property="mvMid" column="mvMid"></result>
+        <result property="publicTime" column="publicTime"></result>
+        <result property="lrc" column="lrc"></result>
+        <result property="mediaUrl" column="mediaUrl"></result>
+    </resultMap>
+
+    <!--增加一条记录-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert
+        <include refid="table">
+        </include>
+        ( <include refid="col">
+    </include> )
+        values(default ,#{id},#{extraName},#{mid},#{title},#{subTitle},#{albumId},
+        #{albumMid},#{mvId},#{mvMid},#{publicTime},#{lrc},#{mediaUrl})
+    </insert>
+
+    <!--根据主键id删除记录-->
+    <delete id="delete">
+        delete from
+        <include refid="table">
+        </include>
+        where pid=#{pid}
+    </delete>
+
+    <!--根据主键修改记录 更新所有列 不做数据验证-->
+    <update id="update">
+        update
+        <include refid="table">
+        </include>
+        <set>
+            id=#{id},extraName=#{extraName},mid=#{mid},title=#{title},subTitle=#{subTitle},
+            albumId=#{albumId},albumMid=#{albumMid},mvId=#{mvId},mvMid=#{mvMid},
+            publicTime=#{publicTime},lrc=#{lrc},mediaUrl=#{mediaUrl}
+        </set>
+        where pid=#{pid}
+    </update>
+
+    <!--根据主键查询记录-->
+    <select id="selectOne" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where pid=#{pid}
+    </select>
+
+    <!--查询集合  startIndex,pageSize -->
+    <select id="selectList" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="selectOneById" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where id=#{id}
+        limit 1
+    </select>
+</mapper>

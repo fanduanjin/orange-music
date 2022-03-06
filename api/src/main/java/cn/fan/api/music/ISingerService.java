@@ -1,7 +1,6 @@
 package cn.fan.api.music;
 
 import cn.fan.model.music.Singer;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @program: orange-music
@@ -9,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author: fanduanjin
  * @create: 2021-04-17 16:35
  */
-public interface ISingerService extends IService<Singer> {
+public interface ISingerService {
 
     /**
      * 插入
@@ -19,21 +18,21 @@ public interface ISingerService extends IService<Singer> {
     int insert(Singer singer);
 
     /**
-     *
+     * 删除
      * @param id
      * @return
      */
     int remove(int id);
 
     /**
-     *
+     * 修改
      * @param singer
      * @return
      */
     int modify(Singer singer);
 
     /**
-     *
+     * 根据主键id获取数据
      * @param id
      * @return
      */
@@ -41,11 +40,16 @@ public interface ISingerService extends IService<Singer> {
 
     /**
      * 根据平台 singer_id获取
-     * @param id
+     * @param platId
      * @return
      */
-    Singer getByPlatId(int id);
+    Singer getByPlatId(int platId);
 
+    /**
+     * 根据 plat_id 判断数据是否存在
+     * @param platId
+     * @return
+     */
     boolean existsByPlayId(int platId);
 
 }

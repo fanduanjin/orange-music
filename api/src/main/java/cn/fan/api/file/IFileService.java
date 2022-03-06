@@ -1,6 +1,9 @@
 package cn.fan.api.file;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @program: orange-music
@@ -10,7 +13,25 @@ import java.io.InputStream;
  */
 public interface IFileService {
 
-    public String uploadFile(byte[] bytes,String fileSuffix);
+    /**
+     * 上传文件
+     *
+     * @param bytes
+     * @param fileSuffix
+     * @return 返回空 就是上传失败
+     */
+    String uploadFile(byte[] bytes, String fileSuffix) ;
 
-    void deleteFile(String path);
+    /**
+     * 删除文件
+     * @param path
+     */
+    boolean deleteFile(String path) ;
+
+    /**
+     * 判断文件是否存在
+     * @param path
+     * @return
+     */
+    boolean existFile(String path);
 }

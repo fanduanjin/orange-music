@@ -8,6 +8,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 import java.io.IOException;
 
+
+/**
+ * @program: orange-music
+ * @description:
+ * @author: fanduanjin
+ * @create: 2021-04-16 15:36
+ */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableDubbo
 public class AppDistributedLock {
@@ -19,7 +26,6 @@ public class AppDistributedLock {
             e.printStackTrace();
         }
     }
-
 
 
 }

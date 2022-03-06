@@ -3,10 +3,12 @@ spring:
     name: server-file
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://jlht.icu:3306/orange_music
+    url: jdbc:mysql://r730.host:3308/readwrite_splitting_db
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 4
   aop:
     auto: true
     proxy-target-class: true
@@ -19,13 +21,13 @@ dubbo:
   application:
     name: server-file
   config-center:
-    address: zookeeper://786793.top:2181
-fdfs:
-  tracker-list: jlht.icu:22122
-  pool:
-    max-total: 200
+    address: zookeeper://r730.host:2181
 mybatis-plus:
   global-config:
     db-config:
       column-format: "`%s`"
       id-type: auto
+minio:
+  endpoint: http://r730.host:9000
+  access-key: minioadmin
+  secret-key: minioadmin

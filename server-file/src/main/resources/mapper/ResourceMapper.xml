@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fan.dao.ResourceMapper">
+    <!-->
+        column 列表
+        PS:修改后检查 所有update 语句确认是否也修改
+    <-->
+    <sql id="col">
+        `id`,`resource_id`,`source_path`,`dfs_path`
+    </sql>
+
+    <!-->表名<-->
+    <sql id="table">
+        `resource`
+    </sql>
+
+    <!-->
+        基础resultMap
+        不含二级查找
+    <-->
+    <resultMap id="baseResultMap" type="cn.fan.model.file.Resource">
+        <result column="id" property="id"></result>
+        <result column="resource_id" property="resourceId"></result>
+        <result column="source_path" property="sourcePath"></result>
+        <result column="dfs_path" property="dfsPath"></result>
+    </resultMap>
+
+    <!--增加一条记录-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert <include refid="table">
+        </include>
+        ( <include refid="col">
+    </include> )
+        values (default,#{resourceId},#{sourcePath},#{dfsPath})
+    </insert>
+
+    <!--根据主键id删除记录-->
+    <delete id="delete">
+        delete from <include refid="table">
+        </include>
+        where id=#{id}
+    </delete>
+
+    <!--根据主键修改记录 更新所有列 不做数据验证-->
+    <update id="update">
+        update <include refid="table">
+        </include>
+        <set>
+            `resource_id`=#{resourceId},`source_path`=#{sourcePath},`dfs_path`=#{dfsPath}
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据主键查询记录-->
+    <select id="selectOne" resultMap="baseResultMap">
+        select <include refid="col">
+        </include>
+        from <include refid="table">
+        </include>
+        where id=#{id}
+    </select>
+
+    <!--查询集合  startIndex,pageSize -->
+    <select id="selectList" resultMap="baseResultMap">
+        select <include refid="col">
+        </include>
+        from <include refid="table">
+        </include>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!--根据 resourceId 查询 一条数据-->
+    <select id="selectOneByResourceId" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where `resource_id`=#{resourceId}
+        limit 1
+    </select>
+
+    <delete id="deleteByResourceId">
+        delete from
+        <include refid="table">
+        </include>
+        where `resource_id`=#{resourceId}
+    </delete>
+</mapper>

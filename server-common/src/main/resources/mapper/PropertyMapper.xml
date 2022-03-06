@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fan.dao.PropertyMapper">
+    <!-->
+        column 列表
+        PS:修改后检查 所有update 语句确认是否也修改
+    <-->
+    <sql id="col">
+        `pid`,`entityType`,entityTypeCrc,`entityId`,`key`,`value`
+    </sql>
+
+    <!-->表名<-->
+    <sql id="table">
+        `property`
+    </sql>
+
+
+    <!-->
+        基础resultMap
+        不含二级查找
+    <-->
+    <resultMap id="baseResultMap" type="cn.fan.model.common.Property">
+        <result column="pid" property="pid"></result>
+        <result column="entityType" property="entityType"></result>
+        <result column="entityTypeCrc" property="entityTypeCrc"></result>
+        <result column="entityId" property="entityId"></result>
+        <result column="key" property="key"></result>
+        <result column="value" property="value"></result>
+    </resultMap>
+
+    <!--增加一条记录-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="pid">
+        insert
+        <include refid="table">
+        </include>
+        ( <include refid="col">
+    </include> )
+        values (default ,#{entityType},#{entityTypeCrc},#{entityId},#{key},#{value})
+    </insert>
+
+    <!--根据主键id删除记录-->
+    <delete id="delete">
+        delete from
+        <include refid="table">
+        </include>
+        where pid=#{pid}
+    </delete>
+
+    <!--根据主键修改记录 更新所有列 不做数据验证-->
+    <update id="update">
+        update
+        <include refid="table">
+        </include>
+        <set>
+            `entityType` =#{entityType}, `entityId` =#{entityId},
+            entityTypeCrc = #{entityTypeCrc},`key`= #{key},`value`=#{value}
+        </set>
+        where pid=#{pid}
+    </update>
+
+    <!--根据主键查询记录-->
+    <select id="selectOne" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where pid=#{pid}
+    </select>
+
+    <!--根据EntityType和EntityId 查询列表-->
+    <select id="selectListByEntityTypeWithEntityId" resultMap="baseResultMap">
+        select
+        <include refid="col">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        where entityTypeCrc=#{entityTypeCrc} and `entityId`=#{entityId} and `entityType`=#{entityType}
+    </select>
+
+    <!--根据EntityType和EntityId删除数据-->
+    <delete id="deleteByEntityTypeWithEntityId">
+        delete from
+        <include refid="table">
+        </include>
+        where entityTypeCrc=#{entityTypeCrc} and `entityId`=#{entityId} and `entityType`=#{entityType}
+    </delete>
+
+
+
+</mapper>
