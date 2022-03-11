@@ -65,7 +65,7 @@ services:
     ports:
       - 9091:8080
     environment:
-      - "admin.config-center=zookeeper://786793.top:2181"
+      - "admin.config-center=zookeeper://0.0.0.0:2181"
   jenkins:
     restart: always
     container_name: jenkins
