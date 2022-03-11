@@ -1,0 +1,15 @@
+{
+  "properties": [
+    {
+      "sourceType": "cn.fan.distributelock.config.DistributeLockConfig",
+      "defaultValue": "localhost:2181",
+      "name": "lock.zookeeper-url",
+      "description": "默认 zk 链接",
+      "type": "java.lang.String",
+      "deprecation": {
+        "reason": "Because when this configuration property is used, there is case that custom language driver cannot be registered correctly."
+      }
+    }
+
+  ]
+}

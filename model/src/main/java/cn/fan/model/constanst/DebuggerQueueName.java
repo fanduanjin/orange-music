@@ -10,5 +10,5 @@ package cn.fan.model.constanst;
  */
 public class DebuggerQueueName {
 
-    public static final String SINGER_DETAIL_QUEUE = "singer_detail_queue";
+    public static final String SINGER_DETAIL_QUEUE = "singer_detail_queue_";
 }

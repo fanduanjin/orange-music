@@ -9,18 +9,27 @@
         pid
                 ,id,`name` ,mid,type,`desc` ,foreignName ,birthday,wiki,pic
     </sql>
+    <sql id="colRightJoin">
+        singer
+                .
+                pid
+                ,singer.id,singer.`name` ,singer.mid,singer.type,singer.`desc` ,singer.foreignName ,singer.birthday,singer.wiki,singer.pic
+    </sql>
 
     <!-->表名<-->
     <sql id="table">
         singer
     </sql>
 
+    <sql id="tableSingerTeam">
+        singerTeam
+    </sql>
     <!-->
         基础resultMap
         不含二级查找
     <-->
     <resultMap id="baseResultMap" type="cn.fan.model.music.Singer">
-        <result property="pid" column="pid"></result>
+        <id property="pid" column="pid"></id>
         <result property="id" column="id"></result>
         <result property="name" column="name"></result>
         <result property="mid" column="mid"></result>
@@ -33,13 +42,22 @@
     </resultMap>
 
     <!--增加一条记录-->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="pid">
         insert
         <include refid="table">
         </include>
         ( <include refid="col">
     </include> )
         values (default ,#{id} ,#{name},#{mid},#{type},#{desc},#{foreignName},#{birthday},#{wiki},#{pic})
+    </insert>
+
+    <insert id="insertTeamSinger">
+        insert
+                singerTeam(pid,teamId,singerId)
+        values(default,
+                #{teamId},
+                #{singerId}
+                )
     </insert>
 
     <!--根据主键id删除记录-->
@@ -100,4 +118,32 @@
         where id=#{id}
         limit 1
     </select>
+
+    <select id="selectTeamSingers" resultMap="baseResultMap">
+        select
+        <include refid="colRightJoin">
+        </include>
+        from
+        <include refid="table">
+        </include>
+        singer
+        right join <include refid="tableSingerTeam">
+    </include> tsinger
+        on singer.id=tsinger.singerId
+        where tsinger.teamId=#{teamId}
+    </select>
+
+    <delete id="deleteTeamSingers">
+        delete from
+        <include refid="tableSingerTeam">
+        </include>
+        where teamId=#{teamId}
+    </delete>
+
+    <delete id="deleteTeamSinger">
+        delete from
+        <include refid="tableSingerTeam">
+        </include>
+        where teamId=#{teamId} and singerId=${singerId}
+    </delete>
 </mapper>

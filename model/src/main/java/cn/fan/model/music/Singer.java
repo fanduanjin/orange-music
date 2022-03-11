@@ -2,9 +2,11 @@ package cn.fan.model.music;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @program: orange-music
@@ -13,6 +15,7 @@ import java.util.Date;
  * @create: 2021-04-16 15:36
  */
 @Data
+@EqualsAndHashCode(exclude = {"pid","birthday"})
 public class Singer implements Serializable {
 
     /**
@@ -65,5 +68,8 @@ public class Singer implements Serializable {
      */
     private String pic;
 
-
+    /**
+     * 如果是个组合 展示歌手列表
+     */
+    private List<Singer> team;
 }

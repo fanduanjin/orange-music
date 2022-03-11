@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "name": "lock",
+      "type": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceType": "cn.fan.distributelock.config.DistributeLockConfig"
+    },
+    {
+      "name": "lock.zookeeperUrl",
+      "type": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceType": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceMethod": "getZookeeperUrl()"
+    },
+    {
+      "name": "lock.retryMillis",
+      "type": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceType": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceMethod": "getRetryMillis()"
+    },
+    {
+      "name": "lock.lockNameSpace",
+      "type": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceType": "cn.fan.distributelock.config.DistributeLockConfig",
+      "sourceMethod": "getLockNameSpace()"
+    }
+  ],
+  "hints": []
+}

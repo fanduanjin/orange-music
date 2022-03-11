@@ -12,44 +12,57 @@ public interface ISingerService {
 
     /**
      * 插入
+     *
      * @param singer
      * @return
      */
-    int insert(Singer singer);
+    boolean insert(Singer singer);
+
+    /**
+     * 添加一个乐队
+     *
+     * @param team
+     * @return
+     */
+    boolean insertTeam(Singer team);
 
     /**
      * 删除
-     * @param id
+     *
+     * @param pid
      * @return
      */
-    int remove(int id);
+    boolean remove(int pid);
 
     /**
      * 修改
+     *
      * @param singer
      * @return
      */
-    int modify(Singer singer);
+    boolean modify(Singer singer);
 
     /**
-     * 根据主键id获取数据
-     * @param id
+     * 修改某个团队信息
+     * @param team
      * @return
      */
-    Singer get(int id);
+    boolean modifyTeam(Singer team);
+    /**
+     * 根据主键pid获取数据
+     *
+     * @param pid
+     * @return
+     */
+    Singer get(int pid);
 
     /**
      * 根据平台 singer_id获取
-     * @param platId
+     *
+     * @param id
      * @return
      */
-    Singer getByPlatId(int platId);
+    Singer getById(int id);
 
-    /**
-     * 根据 plat_id 判断数据是否存在
-     * @param platId
-     * @return
-     */
-    boolean existsByPlayId(int platId);
 
 }

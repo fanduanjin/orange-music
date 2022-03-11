@@ -19,6 +19,8 @@ spring:
   aop:
     auto: true
     proxy-target-class: true
+  jackson:
+    default-property-inclusion: non_null
 mybatis:
   type-aliases-package: cn.fan
   mapper-locations: classpath:mapper/*Mapper.xml
@@ -26,8 +28,6 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 dubbo:
   config-center:
-    address: zookeeper://jlht.icu:2181
+    address: zookeeper://150.158.213.141:2181
   application:
     name: server-music
-  consumer:
-    timeout:

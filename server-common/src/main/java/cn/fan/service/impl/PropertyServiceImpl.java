@@ -5,9 +5,6 @@ import cn.fan.dao.PropertyMapper;
 import cn.fan.model.common.Property;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +20,6 @@ import java.util.List;
 @DubboService
 public class PropertyServiceImpl implements IPropertyService {
 
-    @Autowired
-    SqlSessionFactory sqlSessionFactory;
 
     @Autowired
     private PropertyMapper propertyMapper;
@@ -53,14 +48,7 @@ public class PropertyServiceImpl implements IPropertyService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean insertBatch(List<Property> properties) {
-        if (properties == null || properties.isEmpty()) {
-            throw new IllegalArgumentException("参数property不能为空");
-        }
-        PropertyMapper propertyMapper =
-                sqlSessionFactory.openSession(ExecutorType.BATCH).getMapper(PropertyMapper.class);
-        for (Property property : properties) {
-            propertyMapper.insert(property);
-        }
+
         return true;
     }
 }

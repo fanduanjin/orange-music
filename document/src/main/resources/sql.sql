@@ -40,6 +40,14 @@ create table singer(
 	index(`name`)
 );
 
+create table singerTeam(
+	pid int UNSIGNED auto_increment primary key,
+	teamId int UNSIGNED ,
+	singerId int UNSIGNED,
+	index(teamId)
+);
+
+
 
 create table song(
 	pid int UNSIGNED auto_increment primary key ,
@@ -58,7 +66,31 @@ create table song(
 	index(id),
 	index(title)
 )
+2656
+49
+23778
+17638
 
-show database
-select * from property
-delete from property where entityTypeCrc=331191905 and entityId=999999999 and entityType='cn.fan.model.music.Song'
+select MIN(pid) from singer
+select * from information_schema.innodb_trx
+delete from singer where pid <85000
+delete from singerTeam where pid <85000
+
+select * from singerTeam where teamId=1446099
+select * from singer where id = 1446099
+
+start slave
+show slave status 
+stop slave
+
+
+CHANGE MASTER TO
+
+MASTER_LOG_FILE='binlog.000011',
+MASTER_LOG_POS=364;
+
+select singer.pid, singer.id, singer.`name`, singer.mid, singer.type
+	, singer.`desc`, singer.foreignName, singer.birthday, singer.wiki, singer.pic,tsinger.teamId 
+from singer
+	right join singerTeam tsinger on singer.id = tsinger.singerId
+where tsinger.teamId = 1446099

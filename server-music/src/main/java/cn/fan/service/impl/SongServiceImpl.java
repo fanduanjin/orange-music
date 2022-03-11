@@ -36,41 +36,29 @@ public class SongServiceImpl implements ISongService {
     @Autowired
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+
     @Override
     public int insert(Song song) {
-        //是否可以使用多线程 分布式事务解决方案？是否业务逻辑允许不用事务
-        int result = songMapper.insert(song);
-
         return 0;
     }
 
     @Override
     public int remove(int id) {
-        propertyService.removeByEntityId(Song.class, id);
-        return songMapper.delete(id);
+        return 0;
     }
 
     @Override
     public int update(Song song) {
-       return 1;
+        return 0;
     }
 
     @Override
     public Song get(int id) {
-        CompletableFuture<List<Property>> listCompletableFuture= CompletableFuture.supplyAsync(()->{
-           return propertyService.list(Song.class,id);
-        },threadPoolTaskExecutor);
-        Song song = songMapper.selectOne(id);
-       return null;
+        return null;
     }
 
     @Override
     public Song getByPlatId(int platId) {
-
-        Song song = songMapper.selectOneById(platId);
-        if (song != null) {
-
-        }
-        return song;
+        return null;
     }
 }

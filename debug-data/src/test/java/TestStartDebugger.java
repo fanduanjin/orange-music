@@ -1,6 +1,7 @@
 import cn.fan.AppDebugData;
 import cn.fan.consumer.SingerListConsumer;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,8 +21,11 @@ public class TestStartDebugger {
     @Autowired
     SingerListConsumer singerListConsumer;
 
+    @Autowired
+    RabbitTemplate rabbitTemplate;
     @Test
     void start() throws IOException {
         singerListConsumer.startDebuggerSingerList();
     }
+
 }

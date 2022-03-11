@@ -13,47 +13,29 @@ import java.util.function.Consumer;
 public class Promise<T> {
 
 
-    private Success<T> success;
-    private Fail fail;
+    private Consumer<T> success;
+    private Consumer<String> fail;
 
-    public Promise success(Success<T> success) {
-        this.success = success;
+
+    public Promise fail(Consumer<String> consumer) {
+        this.fail = consumer;
         return this;
     }
 
-    public Promise fail(Fail fail) {
-        this.fail = fail;
+    public Promise success(Consumer<T> consumer) {
+        this.success = consumer;
         return this;
     }
 
-    public void end(ResultModel<T> resultModel) {
-        if (resultModel.getCode() != ResultStatus.SUCCESS.getCode()) {
-            this.success.success(resultModel.getData());
+    public boolean end(ResultModel<T> resultModel) {
+        if (resultModel.getCode() == ResultStatus.SUCCESS.getCode()) {
+            this.success.accept(resultModel.getData());
+            return true;
         } else {
             String msg = "发生错误 错误代码:" + resultModel.getCode() + " msg:" + resultModel.getMsg();
-            this.fail.fail(msg);
+            this.fail.accept(msg);
+            return false;
         }
-    }
-
-    @FunctionalInterface
-    public interface Success<T> {
-
-        /**
-         * 成功时回调
-         *
-         * @param t
-         */
-        void success(T t);
-    }
-
-    @FunctionalInterface
-    public interface Fail {
-        /**
-         * 失败时回调
-         *
-         * @param msg
-         */
-        void fail(String msg);
     }
 
 }

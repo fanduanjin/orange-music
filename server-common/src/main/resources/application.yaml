@@ -7,6 +7,8 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 0
   aop:
     auto: true
     proxy-target-class: true
@@ -19,4 +21,7 @@ dubbo:
   application:
     name: server-common
   config-center:
-    address: zookeeper://jlht.icu:2181
+    address: zookeeper://150.158.213.141:2181
+
+lock:
+  zookeeper-url: 150.158.213.141:2181

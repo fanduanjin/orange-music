@@ -1,6 +1,9 @@
 import cn.fan.AppCommon;
 import cn.fan.api.common.IPropertyService;
+import cn.fan.api.lock.ILock;
 import cn.fan.dao.PropertyMapper;
+import cn.fan.distributelock.lock.LockTemplate;
+import cn.fan.distributelock.lock.ZookeeperDistributedLock;
 import cn.fan.model.common.Property;
 import cn.fan.model.music.Song;
 import com.alibaba.fastjson.JSON;
@@ -24,7 +27,18 @@ import java.util.List;
 public class CommonServiceTest {
 
     @Autowired
-    PropertyMapper propertyService;
+    LockTemplate lockTemplate;
 
+
+
+    @Test
+    public void test() {
+        if (lockTemplate.lock("test")) {
+            System.out.println("以上所");
+        }
+        if (lockTemplate.unLock("test")) {
+            System.out.println("已解锁");
+        }
+    }
 
 }

@@ -63,35 +63,4 @@ public class ZkDistributeLock implements ILock {
         return client;
     }
 
-
-    //private CuratorZookeeperTransporter curatorZookeeperTransporter;
-    //private Map<String, Integer> point;
-    //private Map<String, ZookeeperClient> zookeeperClientMap;
-
-   /* @Autowired
-    ConfigCenterBean configCenterBean;
-
-    ZookeeperClient getZookeeperClient() {
-        if (curatorZookeeperTransporter == null) {
-            ExtensionLoader<ZookeeperTransporter> extensionLoader = ExtensionLoader.getExtensionLoader(ZookeeperTransporter.class);
-            curatorZookeeperTransporter = (CuratorZookeeperTransporter) extensionLoader.getDefaultExtension();
-          *//*  try {
-                Field field = curatorZookeeperTransporter.getClass().getDeclaredField("zookeeperClientMap");
-                field.setAccessible(true);
-                zookeeperClientMap = (Map<String, ZookeeperClient>) field.get(curatorZookeeperTransporter);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }*//*
-        }
-        //获取一个zk url
-        //String url= zookeeperClientMap.keySet().stream().findFirst().get();
-        //ZookeeperClient zookeeperClient=zookeeperClientMap.get(url);
-
-
-        ZookeeperClient zookeeperClient= curatorZookeeperTransporter.connect(URL.valueOf(configCenterBean.getAddress()));
-        return zookeeperClient;
-    }*/
-
 }

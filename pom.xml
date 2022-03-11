@@ -1,53 +1,39 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-            http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.12.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>cn.fan</groupId>
     <artifactId>orange-music</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>orange-music</name>
+    <description>青橙音乐平台</description>
+
     <modules>
         <module>model</module>
         <module>api</module>
         <module>debug-data</module>
-        <module>server-music</module>
-        <module>server-file</module>
+        <module>distributelock-spring-boot-autoconfig</module>
+        <module>distributelock-spring-boot-stater</module>
         <module>document</module>
         <module>server-common</module>
-        <module>server-distributed-lock</module>
+        <module>server-music</module>
+        <module>server-file</module>
     </modules>
-    <groupId>cn.fan</groupId>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-
-  <!--  <repositories>
-        <repository>
-            <id>central</id>
-            <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-            <layout>default</layout>
-            &lt;!&ndash; 是否开启发布版构件下载 &ndash;&gt;
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            &lt;!&ndash; 是否开启快照版构件下载 &ndash;&gt;
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>-->
     <properties>
-        <mybatis.version>2.1.4</mybatis.version>
+        <!-- <mybatis.version>2.1.4</mybatis.version>-->
+        <java.version>1.8</java.version>
         <dubbo.version>2.7.10</dubbo.version>
-        <jsoup.version>1.13.1</jsoup.version>
         <druid.version>1.2.6</druid.version>
-        <pagehelper.version>1.3.0</pagehelper.version>
+        <!--   <pagehelper.version>1.3.0</pagehelper.version>-->
         <hutool.version>5.6.5</hutool.version>
-        <mybatis-plus.version>3.3.2</mybatis-plus.version>
         <minio.version>7.0.2</minio.version>
     </properties>
 
@@ -56,27 +42,35 @@
             <dependency>
                 <groupId>cn.fan</groupId>
                 <artifactId>api</artifactId>
-                <version>2.4.4</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>cn.fan</groupId>
                 <artifactId>model</artifactId>
-                <version>2.4.4</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper.version}</version>
+                <groupId>cn.fan</groupId>
+                <artifactId>distributelock-spirng-boot-stater</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
+            <!--
+                        <dependency>
+                            <groupId>com.github.pagehelper</groupId>
+                            <artifactId>pagehelper-spring-boot-starter</artifactId>
+                            <version>${pagehelper.version}</version>
+                        </dependency>
+            -->
 
+            <!-- <dependency>
+                 <groupId>org.mybatis.spring.boot</groupId>
+                 <artifactId>mybatis-spring-boot-starter</artifactId>
+                 <version>${mybatis.version}</version>
+             </dependency>
+ -->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
@@ -102,7 +96,6 @@
                 <version>${dubbo.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
@@ -122,12 +115,15 @@
                 <version>${minio.version}</version>
             </dependency>
 
+            <!-- <dependency>
+                 <groupId>org.springframework.boot</groupId>
+                 <artifactId>spring-boot-starter-data-jpa</artifactId>
+             </dependency>-->
+
         </dependencies>
 
 
-
     </dependencyManagement>
-
 
     <dependencies>
         <dependency>
@@ -137,37 +133,23 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-json</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-    </dependencies>
 
+    </dependencies>
 
     <build>
         <plugins>
-            <!--   <plugin>
-                   <groupId>org.springframework.boot</groupId>
-                   <artifactId>spring-boot-maven-plugin</artifactId>
-               </plugin>-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
-                </configuration>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-
     </build>
 
 </project>

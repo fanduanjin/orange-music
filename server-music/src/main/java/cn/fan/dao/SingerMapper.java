@@ -24,6 +24,14 @@ public interface SingerMapper {
     int insert(Singer entity);
 
     /**
+     * 为某个乐队 增加一个成员
+     * @return
+     * @param teamId
+     * @param singerId
+     */
+    int insertTeamSinger(int teamId,int singerId);
+
+    /**
      * 根据主键删除记录
      *
      * @param pid
@@ -70,4 +78,27 @@ public interface SingerMapper {
      * @return
      */
     Singer selectOneById(int id);
+
+    /**
+     * 查出某个乐队所有成员
+     * @param teamId
+     * @return
+     */
+    List<Singer> selectTeamSingers(int teamId);
+
+    /**
+     * 删除团队所有成员绑定信息
+     * @param teamId
+     * @return
+     */
+    int deleteTeamSingers(int teamId);
+
+    /**
+     * 删除某个乐队某个成员
+     * @param teamId
+     * @param singerId
+     * @return
+     */
+    int deleteTeamSinger(int teamId,int singerId);
+
 }

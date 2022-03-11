@@ -4,11 +4,11 @@ import cn.fan.model.constanst.DebuggerQueueName;
 import cn.fan.model.music.Singer;
 import cn.fan.model.web.Promise;
 import cn.fan.model.web.ResultModel;
-import cn.fan.model.web.ResultStatus;
+
 import cn.hutool.core.util.PageUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,6 +18,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,7 +36,7 @@ public class SingerListConsumer {
 
     private static Logger LOGGER = LoggerFactory.getLogger(SingerListConsumer.class);
 
-    @Value(value ="${qm-api-host}")
+    @Value(value = "${qm-api-host}")
     private String apiHost;
 
     @Autowired
@@ -54,29 +56,45 @@ public class SingerListConsumer {
         String baseUrl = apiHost + PATH + "?pageIndex=";
         //先爬取一页，顺便获得 total 总数
         String responseBody = HttpUtil.get(baseUrl + 1);
-        ResultModel<List<Singer>> result = objectMapper.readValue(responseBody, ResultModel.class);
+        ResultModel<List<Singer>> result = objectMapper.readValue(responseBody,
+                new TypeReference<ResultModel<List<Singer>>>() {
+                });
         Promise<List<Singer>> promise = new Promise();
-        int pageTotal = result.getTotal();
-        promise.success(singers -> {
+        boolean success = promise.success(singers -> {
             sendToSingerDetailQueue(singers);
         }).fail(msg -> {
             LOGGER.warn("获取歌手列表失败 " + msg);
         }).end(result);
-        for (int i = 1; i <= pageTotal; i++) {
-            responseBody = HttpUtil.get(baseUrl + i);
-            result = objectMapper.readValue(responseBody, ResultModel.class);
-            promise.end(result);
+        if (success) {
+            int pageTotal = PageUtil.totalPage(result.getTotal(), pageSize);
+            for (int i = 1; i <= pageTotal; i++) {
+                responseBody = HttpUtil.get(baseUrl + i);
+                result = objectMapper.readValue(responseBody, new TypeReference<ResultModel<List<Singer>>>() {
+                });
+                promise.end(result);
+            }
         }
+
     }
 
     void sendToSingerDetailQueue(List<Singer> singers) {
         if (singers == null || singers.isEmpty()) {
             throw new IllegalArgumentException("参数 [singers] 不能为空");
         }
-        for (Singer singer : singers) {
-            rabbitTemplate.convertAndSend(DebuggerQueueName.SINGER_DETAIL_QUEUE, singer);
-        }
+        threadPoolTaskExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                singers.forEach(singer -> {
+                    rabbitTemplate.convertAndSend(DebuggerQueueName.SINGER_DETAIL_QUEUE, singer);
+                    LOGGER.info(DebuggerQueueName.SINGER_DETAIL_QUEUE + singer.getName());
+                });
+            }
+        });
+
+
     }
+
 }
+
 
 
